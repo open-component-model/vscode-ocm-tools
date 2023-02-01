@@ -1,4 +1,4 @@
-# VSCode OCM Tools
+# OCM tools for Visual Studio Code
 
 [![REUSE status](https://api.reuse.software/badge/github.com/open-component-model/vscode-ocm-tools)](https://api.reuse.software/info/github.com/open-component-model/vscode-ocm-tools)
 
