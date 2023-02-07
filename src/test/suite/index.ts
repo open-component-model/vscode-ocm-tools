@@ -1,18 +1,21 @@
 import * as path from 'path';
-import * as Mocha from 'mocha';
-import * as glob from 'glob';
+import Mocha from 'mocha';
+import glob from 'glob';
+
+// correct stack traces for assertions
+import 'source-map-support/register';
 
 export function run(): Promise<void> {
 	// Create the mocha test
 	const mocha = new Mocha({
 		ui: 'tdd',
-		color: true
+		color: true,
 	});
 
 	const testsRoot = path.resolve(__dirname, '..');
 
 	return new Promise((c, e) => {
-		glob('**/**.test.js', { cwd: testsRoot }, (err, files) => {
+		glob('**/**.test.js', { cwd: testsRoot }, (err: any, files: any[]) => {
 			if (err) {
 				return e(err);
 			}
@@ -29,9 +32,8 @@ export function run(): Promise<void> {
 						c();
 					}
 				});
-			} catch (err) {
-				console.error(err);
-				e(err);
+			} catch (error) {
+				e(error);
 			}
 		});
 	});
