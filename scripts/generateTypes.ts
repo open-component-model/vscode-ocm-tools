@@ -17,4 +17,3 @@ async function generate(name: string, url: string, out: string) {
 
 generate("ComponentDescriptorV2",v2schema, "ocmv2.d.ts")
 generate("ComponentDescriptorV3",v3schema, "ocmv3.d.ts")
-
