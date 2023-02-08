@@ -10,16 +10,33 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:vscode-ocm-tools.helloWorld"
+    "onCommand:ocm.helloWorld"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vscode-ocm-tools.helloWorld",
+        "command": "ocm.helloWorld",
         "title": "Hello World"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "ocm",
+          "title": "Open Component Mode",
+          "icon": "resources/icons/ocm.png"
+        }
+      ]
+    },
+    "views": {
+      "ocm": [
+        {
+          "id": "ocm.views.workspace",
+          "name": "Workspace"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
