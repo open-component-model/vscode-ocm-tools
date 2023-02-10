@@ -1,4 +1,4 @@
-import { Event, EventEmitter, TreeDataProvider, TreeItem, window } from 'vscode';
+import { Event, EventEmitter, ExtensionContext, TreeDataProvider, TreeItem, window } from 'vscode';
 import { TreeNode } from '../nodes/treeNode';
 
 /**
@@ -9,6 +9,12 @@ export class DataProvider implements TreeDataProvider<TreeItem> {
 	private _onDidChangeTreeData: EventEmitter<TreeItem | undefined> = new EventEmitter<TreeItem | undefined>();
 	readonly onDidChangeTreeData: Event<TreeItem | undefined> = this._onDidChangeTreeData.event;
 
+	context: ExtensionContext;
+
+	constructor(context: ExtensionContext) {
+		this.context = context;
+	}
+	
 	/**
 	 * Reloads tree view item and its children.
 	 * @param treeItem Tree item to refresh.

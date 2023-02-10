@@ -1,14 +1,20 @@
-import * as vscode from 'vscode';
+import { ExtensionContext } from 'vscode';
 import { createTreeViews } from './views/treeViews';
+import { GlobalState, GlobalStateKey } from './globalState';
+import shell from 'shelljs';
 
-export function activate(context: vscode.ExtensionContext) {
-	let disposable = vscode.commands.registerCommand('ocm.startup', () => {
-		vscode.window.showInformationMessage('ocm activated');
-	});
+export function activate(context: ExtensionContext) {
+	//@ts-ignore
+	shell.config.execPath = shell.which('node').toString();
 
-	context.subscriptions.push(disposable);
-		
-	createTreeViews();
+	let globalState = new GlobalState(context);
+
+	// globalState.set(GlobalStateKey.Components, [
+	// 	"ghcr.io/phoban01//phoban.io/podinfo",
+	// 	"ghcr.io/phoban01/ocm//github.com/weaveworks/weave-gitops"
+	// ]);
+
+	createTreeViews(context);
 }
 
-export function deactivate() {}
+export function deactivate(): void { }

@@ -7,7 +7,7 @@ import { createMarkdownTable } from '../../utils/markdownUtils';
 /**
  * Base class for all the OCM tree view items.
  */
-export class ComponentDescriptorNode extends TreeNode {
+export class ComponentVersionNode extends TreeNode {
 	name: string;
 
 	version: string;
@@ -31,6 +31,6 @@ export class ComponentDescriptorNode extends TreeNode {
 
 	// @ts-ignore
 	get description() {
-		return `${this.name} ${this.version}`;
+		return `${this.name}`;
 	}
 }

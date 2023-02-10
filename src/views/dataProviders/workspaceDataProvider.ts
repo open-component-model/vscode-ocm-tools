@@ -4,11 +4,8 @@ import * as path from 'path';
 import { parse } from 'yaml';
 import { DataProvider } from './dataProvider';
 import { TreeNode } from '../nodes/treeNode';
-import { ComponentDescriptorNode } from '../nodes/componentDescriptorNode';
-import { ResourceNode, ResourceTypes} from '../nodes/resourceNode';
-import { SourceNode, SourceTypes } from '../nodes/sourceNode';
-import { ReferenceNode, ReferenceTypes } from '../nodes/referenceNode';
-
+import { ComponentNode } from '../nodes/componentNode';
+import { componentDescriptorParser, getComponentDescriptorMeta, ComponentMeta } from '../componentDescriptorToNode';
 
 export class WorkspaceDataProvider extends DataProvider {
   async buildTree(): Promise<TreeNode[]> {
@@ -18,21 +15,21 @@ export class WorkspaceDataProvider extends DataProvider {
 
     let workspaceRoot = vscode.workspace.workspaceFolders[0].uri.path;
 
-    let nodes: ComponentDescriptorNode[] = [];
+    let nodes: {[key: string]: TreeNode} = {};
 
     for await (const path of walk(workspaceRoot)) {
       let cd: any = parse(fs.readFileSync(path, 'utf-8'));
-      if (cd.apiVersion) {
-        let node = getNode(cd.metadata.name,cd.metadata.version,path, cd.spec.resources,cd.spec.sources,cd.spec.references);
-        nodes.push(node);
-      } else {
-        cd = cd.component;
-        let node = getNode(cd.name,cd.version, path, cd.resources, cd.sources,cd.componentReferences);
-        nodes.push(node);
+      let meta: ComponentMeta = getComponentDescriptorMeta(cd);
+
+      if (!nodes.hasOwnProperty(meta.name)) {
+        nodes[meta.name] = new ComponentNode(meta.name, meta.provider);
       }
+      
+      let node = componentDescriptorParser(cd, path);
+      nodes[meta.name].addChild(node);
     };
 
-    return nodes;
+    return Object.values(nodes);
   }
 }
 
@@ -42,33 +39,4 @@ async function* walk(dir: string): AsyncGenerator<string, any, void> {
     if (d.isDirectory()) { yield* walk(entry); }
     else if (d.isFile() && d.name === "component-descriptor.yaml") { yield entry; };
   }
-}
-
-function getNode(
-  name: string, 
-  version: string, 
-  path: string, 
-  res?: ResourceTypes[], src?: SourceTypes[], ref?: ReferenceTypes[]): ComponentDescriptorNode {
-    let node = new ComponentDescriptorNode(name, version, path);
-
-    let resources = new TreeNode("resources");
-    let sources = new TreeNode("sources");
-    let references = new TreeNode("references");
-
-    if (res && res.length) {
-      res.map((x: ResourceTypes) => resources.addChild(new ResourceNode(x.name,x)));
-      node.addChild(resources);
-    }
-
-    if (src && src.length) {
-      src.map((x: SourceTypes) => sources.addChild(new SourceNode(x.name, x)));
-      node.addChild(sources);
-    }
-
-    if (ref && ref.length) {
-      ref?.map((x: ReferenceTypes) => references.addChild(new ReferenceNode(x.name, x)));
-      node.addChild(references);
-    }
-
-    return node;
 }
