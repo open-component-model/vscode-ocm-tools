@@ -7,9 +7,10 @@ import { HttpsGardenerCloudSchemasComponentDescriptorV2 as ComponentDescriptorV2
 import { HttpsGardenerCloudSchemasComponentDescriptorOcmV3Alpha1 as ComponentDescriptorV3 } from '../ocm/ocmv3';
 
 export type ComponentMeta = {
-    name: string
+    name: string,
     provider: string
-}
+    version: string
+};
 
 export function componentDescriptorParser(desc: ComponentDescriptorV2 | ComponentDescriptorV3, path: string): ComponentVersionNode {
     if (desc.apiVersion) {
@@ -22,15 +23,18 @@ export function componentDescriptorParser(desc: ComponentDescriptorV2 | Componen
 
 export function getComponentDescriptorMeta(desc: ComponentDescriptorV2 | ComponentDescriptorV3): ComponentMeta {
     let name: string;
+    let version: string;
     let provider: string | undefined;
     if (desc.apiVersion) {
         name = (<ComponentDescriptorV3>desc).metadata.name;
+        version = (<ComponentDescriptorV3>desc).metadata.version;
         provider = (<ComponentDescriptorV3>desc).metadata.provider?.name;
     } else {
         name = (<ComponentDescriptorV2>desc).component.name;
+        version = (<ComponentDescriptorV2>desc).component.version;
         provider = (<ComponentDescriptorV2>desc).component.provider;
     }
-    return <ComponentMeta>{name: name, provider: provider};
+    return <ComponentMeta>{name: name, provider: provider, version: version};
 }
 
 function componentDescriptorToTree(

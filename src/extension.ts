@@ -1,20 +1,18 @@
-import { ExtensionContext } from 'vscode';
+import { commands, ExtensionContext } from 'vscode';
 import { createTreeViews } from './views/treeViews';
 import { GlobalState, GlobalStateKey } from './globalState';
+import { openAddComponentWebview } from './commands/openAddComponentWebview';
+import { setExtensionContext } from './extensionContext';
 import shell from 'shelljs';
 
 export function activate(context: ExtensionContext) {
 	//@ts-ignore
 	shell.config.execPath = shell.which('node').toString();
-
-	let globalState = new GlobalState(context);
-
-	// globalState.set(GlobalStateKey.Components, [
-	// 	"ghcr.io/phoban01//phoban.io/podinfo",
-	// 	"ghcr.io/phoban01/ocm//github.com/weaveworks/weave-gitops"
-	// ]);
-
+	setExtensionContext(context);
 	createTreeViews(context);
+
+	commands.registerCommand("ocm.add", openAddComponentWebview, {ctx: context});
 }
 
 export function deactivate(): void { }
+

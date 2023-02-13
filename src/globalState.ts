@@ -4,7 +4,9 @@ const enum GlobalStatePrefixes {
 }
 
 export const enum GlobalStateKey {
+	// eslint-disable-next-line @typescript-eslint/naming-convention
 	Components = 'components',
+	// eslint-disable-next-line @typescript-eslint/naming-convention
 	FirstEverActivationStorageKey = 'firstEverActivation',
 }
 

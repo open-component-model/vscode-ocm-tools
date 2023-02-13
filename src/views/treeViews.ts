@@ -1,4 +1,4 @@
-import { TreeItem, TreeView, window } from 'vscode';
+import { TreeItem, TreeView, window, commands } from 'vscode';
 import { WorkspaceDataProvider } from './dataProviders/workspaceDataProvider';
 import { RemoteDataProvider } from './dataProviders/remoteDataProvider';
 
@@ -24,5 +24,5 @@ export function createTreeViews(context: ExtensionContext) {
 	remoteTreeView = window.createTreeView(Views.RemoteView, {
 		treeDataProvider: remoteTreeViewProvider,
 		showCollapseAll: true,
-	});	
+	});
 }
