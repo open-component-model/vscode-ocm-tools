@@ -45,6 +45,6 @@ export class OCMNode extends TreeNode {
 	 * @param source target source
 	 */
 	updateStatus(obj: ResourceTypes | SourceTypes | ReferenceTypes): void {
-		this.setIcon(TreeNodeIcon.Success);
+		//this.setIcon(TreeNodeIcon.Success);
 	}
 }

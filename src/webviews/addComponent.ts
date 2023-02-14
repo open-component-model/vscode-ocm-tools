@@ -56,10 +56,11 @@ export class AddComponentPanel {
 
 	private state: GlobalState;
 	/** Only send message to webview when it's ready (html parsed, "message" event listener set) */
-	private _onWebviewFinishedLoading = () => {};
+	private _onWebviewFinishedLoading = () => { };
 
-	public static createOrShow(extensionUri: Uri, context: ExtensionContext) {
+	public static createOrShow(context: ExtensionContext) {
 		const column = window.activeTextEditor ? window.activeTextEditor.viewColumn : undefined;
+		let extensionUri: Uri = context.extensionUri;
 
 		// If we already have a panel, show it.
 		if (AddComponentPanel.currentPanel) {
@@ -75,7 +76,7 @@ export class AddComponentPanel {
 			getWebviewOptions(extensionUri),
 		);
 
-		AddComponentPanel.currentPanel = new AddComponentPanel(panel, extensionUri,context);
+		AddComponentPanel.currentPanel = new AddComponentPanel(panel, extensionUri, context);
 	}
 
 	public static revive(panel: WebviewPanel, extensionUri: Uri, context: ExtensionContext) {
@@ -86,7 +87,7 @@ export class AddComponentPanel {
 		this._panel = panel;
 		this._extensionUri = extensionUri;
 		this.state = new GlobalState(context);
-		
+
 		// Set the webview's initial html content
 		this._update();
 
@@ -100,7 +101,7 @@ export class AddComponentPanel {
 			if (this._panel.visible) {
 				this._update();
 			}
-		}, null, this._disposables );
+		}, null, this._disposables);
 
 		// Handle messages from the webview
 		this._panel.webview.onDidReceiveMessage(async (message: MessageFromWebview) => {
@@ -142,8 +143,8 @@ export class AddComponentPanel {
 				}
 			}
 		},
-		null,
-		this._disposables,
+			null,
+			this._disposables,
 		);
 	}
 
@@ -174,7 +175,7 @@ export class AddComponentPanel {
 	private async _update() {
 		this._onWebviewFinishedLoading = () => {
 			this._updateWebviewContent();
-			this._onWebviewFinishedLoading = () => {};
+			this._onWebviewFinishedLoading = () => { };
 		};
 		this._panel.webview.html = this._getHtmlForWebview(this._panel.webview);
 	}
@@ -185,7 +186,7 @@ export class AddComponentPanel {
 
 		// And the uri we use to load this script in the webview
 		const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
-		
+
 		// Local path to css styles
 		const styleResetPath = Uri.joinPath(this._extensionUri, 'media', 'reset.css');
 		const styleVSCodePath = Uri.joinPath(this._extensionUri, 'media', 'vscode.css');
