@@ -1,17 +1,19 @@
 import { ExtensionContext, window } from 'vscode';
-import { getExtensionContext } from '../extensionContext';
-import { AddComponentPanel } from '../webviews/addComponent';
-import { ComponentVersionNode } from '../views/nodes/componentVersionNode';
-import { ComponentNode } from '../views/nodes/componentNode';
-import { GlobalState,GlobalStateKey } from '../globalState';
-import { remoteTreeViewProvider } from '../views/treeViews';
+import { getExtensionContext } from './extensionContext';
+import { AddComponentPanel } from './webviews/addComponent';
+import { ComponentNode } from './views/nodes/componentNode';
+import { GlobalState,GlobalStateKey } from './globalState';
+import { remoteTreeViewProvider } from './views/treeViews';
+
+export async function addComponent() {
+	AddComponentPanel.createOrShow(getExtensionContext());
+}
 
 export async function removeComponent(node: ComponentNode) {
 	let ctx: ExtensionContext = getExtensionContext();
 	let state: GlobalState = new GlobalState(ctx);
 
 	let components: string[] | undefined = state.get(GlobalStateKey.Components);
-	
 	if (!components) {return ;}
 
 	let item: string = `${node.registry}//${node.name}`;
@@ -28,6 +30,3 @@ export async function removeComponent(node: ComponentNode) {
 	});
 }
 
-export async function openAddComponentWebview() {
-	AddComponentPanel.createOrShow(getExtensionContext());
-}
