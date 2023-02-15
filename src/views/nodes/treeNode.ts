@@ -104,4 +104,25 @@ export class TreeNode extends TreeItem {
             title: 'View Resource',
         };
     }
+
+    	/**
+	 * VSCode contexts to use for setting {@link contextValue}
+	 * of this tree node. Used for context/inline menus.
+	 */
+	get contexts(): string[] {
+		return [];
+	}
+
+	// @ts-ignore
+	get contextValue() {
+		if (this.contexts.length) {
+			return this.joinContexts(this.contexts);
+		}
+	}
+
+    joinContexts(contexts: string[]): string {
+		return contexts.filter(context => context.length)
+			.map(context => `${context};`)
+			.join('');
+	}
 }

@@ -1,10 +1,19 @@
+.github
+.gitignore
+webpack.config.js
+
 .vscode/**
 .vscode-test/**
+out/**
+node_modules/**
 src/**
-.gitignore
-.yarnrc
-vsc-extension-quickstart.md
+test
+node_modules
+
 **/tsconfig.json
 **/.eslintrc.json
 **/*.map
 **/*.ts
+
+# Remove next line to include docs images for the README.md file (if the package is intended to be shared by `.vsix`), but vsce will still transform the urls in README files
+docs/**

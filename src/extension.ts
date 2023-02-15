@@ -1,14 +1,18 @@
-import * as vscode from 'vscode';
+import { commands, ExtensionContext } from 'vscode';
 import { createTreeViews } from './views/treeViews';
+import { addComponent, removeComponent } from './commands';
+import { setExtensionContext } from './extensionContext';
+import * as shell from 'shelljs';
 
-export function activate(context: vscode.ExtensionContext) {
-	let disposable = vscode.commands.registerCommand('ocm.startup', () => {
-		vscode.window.showInformationMessage('ocm activated');
-	});
+export function activate(context: ExtensionContext) {
+	//@ts-ignore
+	shell.config.execPath = shell.which('node').toString();
 
-	context.subscriptions.push(disposable);
-		
-	createTreeViews();
+	setExtensionContext(context);
+	createTreeViews(context);
+
+	commands.registerCommand("ocm.add", addComponent);
+	commands.registerCommand("ocm.remove", removeComponent);
 }
 
-export function deactivate() {}
+export function deactivate(): void { }
