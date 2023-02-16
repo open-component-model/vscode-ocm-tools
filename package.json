@@ -28,7 +28,11 @@
       {
         "command": "ocm.resource.download",
         "title": "Download resource to workspace"
-      }      
+      },
+      {
+        "command": "ocm.component-version.download",
+        "title": "Download component to workspace"
+      }
     ],
     "viewsContainers": {
       "activitybar": [
@@ -71,11 +75,16 @@
           "when": "view == ocm.views.remote && viewItem =~ /Component;/",
           "group": "navigation@0"
         },
-          {
-            "command": "ocm.resource.download",
-            "when": "viewItem =~ /Resource;/",
-            "group": "navigation@0"
-          }        
+        {
+          "command": "ocm.resource.download",
+          "when": "viewItem =~ /Resource;/",
+          "group": "navigation@0"
+        },
+        {
+          "command": "ocm.component-version.download",
+          "when": "viewItem =~ /ComponentVersion;/",
+          "group": "navigation@0"
+        }
       ]
     }
   },

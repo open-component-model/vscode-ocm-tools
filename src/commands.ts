@@ -1,11 +1,13 @@
 import { commands } from "vscode";
 import { addRemoteComponent } from "./commands/addRemoteComponent";
+import { downloadComponent } from "./commands/downloadComponent";
 import { downloadResource } from "./commands/downloadResource";
 import { openDocument } from "./commands/openDocuments";
 import { removeRemoteComponent } from "./commands/removeRemoteComponent";
 
 export enum CommandIDs {
 	componentVersionOpen = "ocm.component-version.open",
+	componentVersionDownload = "ocm.component-version.download",
 	resourceOpen = "ocm.resource.open",
 	resourceDownload = "ocm.resource.download",
 	sourceOpen = "ocm.source.open",
@@ -16,6 +18,7 @@ export enum CommandIDs {
 
 export function registerCommands() {
 	commands.registerCommand(CommandIDs.componentVersionOpen, openDocument);
+	commands.registerCommand(CommandIDs.componentVersionDownload, downloadComponent);
 	commands.registerCommand(CommandIDs.resourceOpen, openDocument);
 	commands.registerCommand(CommandIDs.resourceDownload, downloadResource);
 	commands.registerCommand(CommandIDs.sourceOpen, openDocument);
