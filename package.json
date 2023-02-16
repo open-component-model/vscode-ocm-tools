@@ -11,6 +11,10 @@
   "categories": [
     "Other"
   ],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/open-component-model/vscode-ocm-tools"
+	},  
   "activationEvents": [
     "onCommand:ocm.helloWorld"
   ],
