@@ -6,6 +6,7 @@ import { DataProvider } from './dataProvider';
 import { TreeNode } from '../nodes/treeNode';
 import { ComponentNode } from '../nodes/componentNode';
 import { componentDescriptorParser, getComponentDescriptorMeta, ComponentMeta } from '../componentDescriptorToNode';
+import { fetchComponents } from '../../commands';
 
 export class WorkspaceDataProvider extends DataProvider {
   async buildTree(): Promise<TreeNode[]> {
@@ -18,15 +19,17 @@ export class WorkspaceDataProvider extends DataProvider {
     let nodes: {[key: string]: TreeNode} = {};
 
     for await (const path of walk(workspaceRoot)) {
-      let cd: any = parse(fs.readFileSync(path, 'utf-8'));
-      let meta: ComponentMeta = getComponentDescriptorMeta(cd);
+      for await (const cd of fetchComponents(path)) {
+        let meta: ComponentMeta = getComponentDescriptorMeta(cd);
 
-      if (!nodes.hasOwnProperty(meta.name)) {
-        nodes[meta.name] = new ComponentNode(meta.name, meta.provider);
+        if (!nodes.hasOwnProperty(meta.name)) {
+          nodes[meta.name] = new ComponentNode(meta.name, meta.provider);
+        }
+        
+        let node = componentDescriptorParser(cd, path);
+        nodes[meta.name].addChild(node);
       }
-      
-      let node = componentDescriptorParser(cd, path);
-      nodes[meta.name].addChild(node);
+
     };
 
     return Object.values(nodes);
@@ -37,6 +40,6 @@ async function* walk(dir: string): AsyncGenerator<string, any, void> {
   for await (const d of await fs.promises.opendir(dir)) {
     const entry = path.join(dir, d.name);
     if (d.isDirectory()) { yield* walk(entry); }
-    else if (d.isFile() && d.name === "component-descriptor.yaml") { yield entry; };
+    else if (d.isFile() && d.name === "component-descriptor.yaml") { yield dir; };
   }
 }

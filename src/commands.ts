@@ -1,32 +1,13 @@
-import { ExtensionContext, window } from 'vscode';
-import { getExtensionContext } from './extensionContext';
-import { AddComponentPanel } from './webviews/addComponent';
-import { ComponentNode } from './views/nodes/componentNode';
-import { GlobalState,GlobalStateKey } from './globalState';
-import { remoteTreeViewProvider } from './views/treeViews';
+import { commands } from "vscode";
+import { addRemoteComponent } from "./commands/addRemoteComponent";
+import { openDocument } from "./commands/openDocuments";
+import { removeRemoteComponent } from "./commands/removeRemoteComponent";
 
-export async function addComponent() {
-	AddComponentPanel.createOrShow(getExtensionContext());
+export function registerCommands() {
+	commands.registerCommand("ocm.component-version.open", openDocument);
+	commands.registerCommand("ocm.resource.open", openDocument);
+	commands.registerCommand("ocm.source.open", openDocument);
+	commands.registerCommand("ocm.reference.open", openDocument);
+	commands.registerCommand("ocm.remote.add", addRemoteComponent);
+	commands.registerCommand("ocm.remote.remove", removeRemoteComponent);
 }
-
-export async function removeComponent(node: ComponentNode) {
-	let ctx: ExtensionContext = getExtensionContext();
-	let state: GlobalState = new GlobalState(ctx);
-
-	let components: string[] | undefined = state.get(GlobalStateKey.Components);
-	if (!components) {return ;}
-
-	let item: string = `${node.registry}//${node.name}`;
-
-	components = components.filter(x => x !== item);
-	
-	state.set(GlobalStateKey.Components, components);
-
-	remoteTreeViewProvider.refresh();
-
-	let msg: string = `Component removed: ${item}`;
-	window.showInformationMessage(msg, {
-		modal: false,
-	});
-}
-

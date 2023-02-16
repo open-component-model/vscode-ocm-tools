@@ -1,8 +1,9 @@
-import { commands, ExtensionContext } from 'vscode';
-import { createTreeViews } from './views/treeViews';
-import { addComponent, removeComponent } from './commands';
-import { setExtensionContext } from './extensionContext';
 import * as shell from 'shelljs';
+import { ExtensionContext } from 'vscode';
+import { registerCommands } from './commands';
+import { createDocumentProvider } from './documents/dataProvider';
+import { setExtensionContext } from './extensionContext';
+import { createTreeViews } from './views/treeViews';
 
 export function activate(context: ExtensionContext) {
 	//@ts-ignore
@@ -10,9 +11,10 @@ export function activate(context: ExtensionContext) {
 
 	setExtensionContext(context);
 	createTreeViews(context);
-
-	commands.registerCommand("ocm.add", addComponent);
-	commands.registerCommand("ocm.remove", removeComponent);
+	createDocumentProvider(context);
+	registerCommands();
 }
 
 export function deactivate(): void { }
+
+

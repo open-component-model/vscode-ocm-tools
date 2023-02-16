@@ -4,15 +4,15 @@ import { SourceTypes } from './sourceNode';
 import { ReferenceTypes } from './referenceNode';
 import { TreeNode, TreeNodeIcon } from './treeNode';
 import { createMarkdownTable } from '../../utils/markdownUtils';
+import { HttpsGardenerCloudSchemasComponentDescriptorOcmV3Alpha1 as ComponentDescriptorV3 } from '../../ocm/ocmv3';
 
 /**
  * Base class for all the OCM tree view items.
  */
-export class OCMNode extends TreeNode {
+export class OCMNode extends TreeNode {	
+	resource: ResourceTypes | SourceTypes | ReferenceTypes | ComponentDescriptorV3;
 
-	resource: ResourceTypes | SourceTypes | ReferenceTypes;
-
-	constructor(label: string, obj: ResourceTypes | SourceTypes | ReferenceTypes) {
+	constructor(label: string, obj: ResourceTypes | SourceTypes | ReferenceTypes | ComponentDescriptorV3) {
 		super(label);
 
 		this.resource = obj; 
@@ -21,10 +21,6 @@ export class OCMNode extends TreeNode {
 		this.updateStatus(obj);
 	}
 
-	// @ts-ignore
-	get tooltip() {
-		return this.getMarkdownHover(this.resource);
-	}
 
 	// @ts-ignore
 	get description() {
@@ -32,19 +28,10 @@ export class OCMNode extends TreeNode {
 	}
 
 	/**
-	 * Creates markdwon string for Source tree view item tooltip.
-	 * @param source GitRepository, HelmRepository or Bucket kubernetes object.
-	 * @returns Markdown string to use for Source tree view item tooltip.
-	 */
-	getMarkdownHover(obj: ResourceTypes | SourceTypes | ReferenceTypes): MarkdownString {
-		return createMarkdownTable(obj);
-	}
-
-	/**
 	 * Update source status with showing error icon when fetch failed.
 	 * @param source target source
 	 */
-	updateStatus(obj: ResourceTypes | SourceTypes | ReferenceTypes): void {
+	updateStatus(obj: ResourceTypes | SourceTypes | ReferenceTypes | ComponentDescriptorV3): void {
 		//this.setIcon(TreeNodeIcon.Success);
 	}
 }

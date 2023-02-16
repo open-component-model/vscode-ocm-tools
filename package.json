@@ -18,11 +18,11 @@
   "contributes": {
     "commands": [
       {
-        "command": "ocm.add",
+        "command": "ocm.remote.add",
         "title": "Add Component"
       },
       {
-        "command": "ocm.remove",
+        "command": "ocm.remote.remove",
         "title": "Remove Component"
       }
     ],
@@ -39,7 +39,7 @@
       "ocm": [
         {
           "id": "ocm.views.workspace",
-          "name": "Workspace Components"
+          "name": "Local Components"
         },
         {
           "id": "ocm.views.remote",
@@ -50,20 +50,20 @@
     "viewsWelcome": [
       {
         "view": "ocm.views.remote",
-        "contents": "No remote components found.\n[Add Component](command:ocm.add)"
+        "contents": "No remote components found.\n[Add Component from Repository](command:ocm.remote.add)"
       }
     ],
     "menus": {
       "view/title": [
         {
-          "command": "ocm.add",
+          "command": "ocm.remote.add",
           "when": "view == ocm.views.remote",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
-          "command": "ocm.remove",
+          "command": "ocm.remote.remove",
           "when": "view == ocm.views.remote && viewItem =~ /Component;/",
           "group": "navigation@0"
         }
