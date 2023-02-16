@@ -4,7 +4,7 @@ import { componentDescriptorParser, getComponentDescriptorMeta, ComponentMeta } 
 import { GlobalState, GlobalStateKey } from '../../globalState';
 import { ComponentNode } from '../nodes/componentNode';
 import { ThemeIcon } from 'vscode';
-import { fetchComponents } from '../../commands';
+import { fetchComponents } from '../../commands/fetchComponents';
 
 export class RemoteDataProvider extends DataProvider {
   async buildTree(): Promise<TreeNode[]> {

@@ -1,12 +1,11 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { parse } from 'yaml';
 import { DataProvider } from './dataProvider';
 import { TreeNode } from '../nodes/treeNode';
 import { ComponentNode } from '../nodes/componentNode';
 import { componentDescriptorParser, getComponentDescriptorMeta, ComponentMeta } from '../componentDescriptorToNode';
-import { fetchComponents } from '../../commands';
+import { fetchComponents } from '../../commands/fetchComponents';
 
 export class WorkspaceDataProvider extends DataProvider {
   async buildTree(): Promise<TreeNode[]> {

@@ -11,24 +11,24 @@ class OCMProvider implements TextDocumentContentProvider {
     async provideTextDocumentContent(uri: Uri): Promise<string> {
         let resource: string | undefined = uri.path.split('/').pop();
         if (resource === undefined) {
-            return `Error loading ${uri}`;
+            return new Promise((resolve, reject) => resolve(""));
         }
-        let component = uri.path.replace(resource,"");
+        let component = uri.path.replace(resource, "");
         switch (uri.query) {
             case "type=Resource": {
-                return await getItemYAML("resource", component.replace(/\/$/,""), resource.replace(".yaml",""));
-            } 
+                return await getItemYAML("resource", component.replace(/\/$/, ""), resource.replace(".yaml", ""));
+            }
             case "type=Source": {
-                return await getItemYAML("source", component.replace(/\/$/,""), resource.replace(".yaml",""));
-            } 
+                return await getItemYAML("source", component.replace(/\/$/, ""), resource.replace(".yaml", ""));
+            }
             case "type=Reference": {
-                return await getItemYAML("reference", component.replace(/\/$/,""), resource.replace(".yaml",""));
+                return await getItemYAML("reference", component.replace(/\/$/, ""), resource.replace(".yaml", ""));
             }
             case "type=ComponentVersion": {
-                return await getComponentDescriptor(component.replace(/\/$/,""), resource.replace(".yaml",""));
-            }                         
+                return await getComponentDescriptor(component.replace(/\/$/, ""), resource.replace(".yaml", ""));
+            }
             default: {
-                return `Error loading ${uri}`;
+                return new Promise((resolve, reject) => resolve(""));
             }
         }
     }
