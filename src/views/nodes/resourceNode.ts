@@ -1,4 +1,5 @@
 import { MarkdownString, ThemeIcon } from 'vscode';
+import { CommandIDs } from '../../commands';
 import { ResourceType, OciImageResource, GenericResource } from '../../ocm/ocmv3';
 import { createMarkdownTable, KnownTreeNodeResources } from '../../utils/markdownUtils';
 import { ComponentMeta } from '../componentDescriptorToNode';
@@ -34,6 +35,10 @@ export class ResourceNode extends OCMNode {
 		this.setIcon(icon);
 	}
 
+	get contexts() {
+		return [this.kind];
+	}
+
 	// @ts-ignore
 	get tooltip() {
 		return this.getMarkdownHover(this.meta, this.resource);
@@ -43,11 +48,10 @@ export class ResourceNode extends OCMNode {
 		return createMarkdownTable(meta, obj);
 	}
 
-
 	// @ts-ignore
 	get command(): Command | undefined {
 		return {
-			command: "ocm.resource.open",
+			command: CommandIDs.resourceOpen,
 			arguments: [this.meta, this.resource, this.kind],
 			title: 'View Resource',
 		};

@@ -1,6 +1,7 @@
 import { Reference } from '../../ocm/ocmv3';
 import { OCMNode } from './ocmNode';
 import { ComponentMeta } from '../componentDescriptorToNode';
+import { CommandIDs } from '../../commands';
 
 export type ReferenceTypes = Reference;
 
@@ -17,7 +18,7 @@ export class ReferenceNode extends OCMNode {
 	// @ts-ignore
 	get command(): Command | undefined {
 		return {
-			command: "ocm.reference.open",
+			command: CommandIDs.referenceOpen,
 			arguments: [this.meta, this.resource, this.kind],
 			title: 'View Reference Definition',
 		};

@@ -1,6 +1,7 @@
 import { SourceDefinition } from '../../ocm/ocmv3';
 import { OCMNode } from './ocmNode';
 import { ComponentMeta } from '../componentDescriptorToNode';
+import { CommandIDs } from '../../commands';
 
 export type SourceTypes = SourceDefinition;
 
@@ -17,7 +18,7 @@ export class SourceNode extends OCMNode {
 	// @ts-ignore
 	get command(): Command | undefined {
 		return {
-			command: "ocm.source.open",
+			command: CommandIDs.sourceOpen,
 			arguments: [this.meta, this.resource, this.kind],
 			title: 'View Source Definition',
 		};

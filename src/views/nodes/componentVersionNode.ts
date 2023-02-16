@@ -1,9 +1,7 @@
-import { MarkdownString, ThemeColor, ThemeIcon } from 'vscode';
 import { HttpsGardenerCloudSchemasComponentDescriptorOcmV3Alpha1 as ComponentDescriptorV3 } from '../../ocm/ocmv3';
-import { TreeNode, TreeNodeIcon } from './treeNode';
-import { createMarkdownTable } from '../../utils/markdownUtils';
 import { ComponentMeta } from '../componentDescriptorToNode';
 import { OCMNode } from './ocmNode';
+import { CommandIDs } from '../../commands';
 
 /**
  * Base class for all the OCM tree view items.
@@ -36,7 +34,7 @@ export class ComponentVersionNode extends OCMNode {
 	// @ts-ignore
 	get command(): Command | undefined {
 		return {
-			command: "ocm.component-version.open",
+			command: CommandIDs.componentVersionOpen,
 			arguments: [this.meta, this.resource, this.kind],
 			title: 'View Component Descriptor',
 		};

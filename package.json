@@ -24,7 +24,11 @@
       {
         "command": "ocm.remote.remove",
         "title": "Remove Component"
-      }
+      },
+      {
+        "command": "ocm.resource.download",
+        "title": "Download resource to workspace"
+      }      
     ],
     "viewsContainers": {
       "activitybar": [
@@ -66,7 +70,12 @@
           "command": "ocm.remote.remove",
           "when": "view == ocm.views.remote && viewItem =~ /Component;/",
           "group": "navigation@0"
-        }
+        },
+          {
+            "command": "ocm.resource.download",
+            "when": "viewItem =~ /Resource;/",
+            "group": "navigation@0"
+          }        
       ]
     }
   },

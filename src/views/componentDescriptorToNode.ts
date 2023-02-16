@@ -13,6 +13,11 @@ export type ComponentMeta = {
     path: string
 };
 
+export function getComponentURI(meta: ComponentMeta): string {
+    const location = meta.path ? meta.path : meta.registry;
+    return `${location}//${meta.name}:${meta.version}`;
+}
+
 export function componentDescriptorParser(cd: ComponentDescriptorV3, path: string): ComponentVersionNode {
     let meta: ComponentMeta = getComponentDescriptorMeta(cd);
     if (path !== "") {
