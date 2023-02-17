@@ -7,12 +7,13 @@
 To preview the extension without running the debugger you can install the extension from a `vsix` file.
 
 The process is as follows:
+- clone this github repo and navigate into it
 - install npm, e.g. using `brew install npm`
 - install the module "ts-loader": `npm install -D ts-loader`
 - install the `vsce` compiler: `npm install -g @vscode/vsce`
 - run the compiler against this project: `vsce package`
 - in vscode navigate to the "Extensions" tab and select "Install from VSIX..." from the menu
-- select `vscode-ocm-tools-X.X.X.vsix` in the file dialog 
+- in the file dialog navigate to the folder where you compiled the extension and select `vscode-ocm-tools-X.X.X.vsix`
 
 ### Generate Typescript types for OCM
 
