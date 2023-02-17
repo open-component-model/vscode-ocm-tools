@@ -14,7 +14,7 @@
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/open-component-model/vscode-ocm-tools"
-	},  
+	},
   "activationEvents": [
     "onCommand:ocm.helloWorld"
   ],
@@ -43,7 +43,7 @@
         {
           "id": "ocm",
           "title": "Open Component Model",
-          "icon": "resources/icons/ocm.png"
+          "icon": "resources/icons/ocm.svg"
         }
       ]
     },
