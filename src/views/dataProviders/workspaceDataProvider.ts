@@ -39,6 +39,6 @@ async function* walk(dir: string): AsyncGenerator<string, any, void> {
   for await (const d of await fs.promises.opendir(dir)) {
     const entry = path.join(dir, d.name);
     if (d.isDirectory()) { yield* walk(entry); }
-    else if (d.isFile() && d.name === "component-descriptor.yaml") { yield dir; };
+    else if (d.isFile() && d.name === "component-descriptor.yaml" || d.name === "artifact-index.json") { yield dir; };
   }
 }
