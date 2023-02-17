@@ -1,4 +1,4 @@
-import { Event, EventEmitter, ExtensionContext, TreeDataProvider, TreeItem, window } from 'vscode';
+import { Event, EventEmitter, ExtensionContext, TreeDataProvider, TreeItem } from 'vscode';
 import { TreeNode } from '../nodes/treeNode';
 
 /**

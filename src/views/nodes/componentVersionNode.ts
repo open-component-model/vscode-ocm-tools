@@ -1,34 +1,25 @@
-import { MarkdownString, ThemeColor, ThemeIcon } from 'vscode';
-import { HttpsGardenerCloudSchemasComponentDescriptorV2 as ComponentDescriptorV2 } from '../../ocm/ocmv2';
 import { HttpsGardenerCloudSchemasComponentDescriptorOcmV3Alpha1 as ComponentDescriptorV3 } from '../../ocm/ocmv3';
-import { TreeNode, TreeNodeIcon } from './treeNode';
-import { createMarkdownTable } from '../../utils/markdownUtils';
+import { ComponentMeta } from '../componentDescriptorToNode';
+import { OCMNode } from './ocmNode';
+import { CommandIDs } from '../../commands';
 
 /**
  * Base class for all the OCM tree view items.
  */
-export class ComponentVersionNode extends TreeNode {
-	name: string;
+export class ComponentVersionNode extends OCMNode {
+	kind: string = "ComponentVersion";
 
-	version: string;
-	
-	path: string;
+	meta: ComponentMeta;
 
-	constructor(name: string, version: string, path: string) {
-		super(version);
+	constructor(resource: ComponentDescriptorV3, meta: ComponentMeta) {
+		super(meta.version, resource);
 
-		this.name = name;
-
-		this.version = version;
-
-		this.path = path;
-
-		this.iconPath = new ThemeIcon("unverified", new ThemeColor('editorWarning.foreground'));
+		this.meta = meta;
 	}
 
 	// @ts-ignore
 	get tooltip() {
-		return this.version;
+		return this.meta.version;
 	}
 
 	// @ts-ignore
@@ -38,5 +29,14 @@ export class ComponentVersionNode extends TreeNode {
 
 	get contexts() {
 		return ["ComponentVersion"];
+	}
+
+	// @ts-ignore
+	get command(): Command | undefined {
+		return {
+			command: CommandIDs.componentVersionOpen,
+			arguments: [this.meta, this.resource, this.kind],
+			title: 'View Component Descriptor',
+		};
 	}
 }

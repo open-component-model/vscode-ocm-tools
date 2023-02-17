@@ -2,6 +2,16 @@
 
 [![REUSE status](https://api.reuse.software/badge/github.com/open-component-model/vscode-ocm-tools)](https://api.reuse.software/info/github.com/open-component-model/vscode-ocm-tools)
 
+### Install the extension from source
+
+To preview the extension without running the debugger you can install the extension from a `vsix` file.
+
+The process is as follows:
+- Install the `vsce` compiler: `npm install -g @vscode/vsce`
+- Run the compiler against this project: `vsce package`
+- In vscode navigation to the "Extensions" tab and select "Install from VSIX..." from the menu
+- Select `vscode-ocm-tools-X.X.X.vsix` in the file dialog 
+
 ### Generate Typescript types for OCM
 
 Typescript types can be automatically generated using the OCM schema.

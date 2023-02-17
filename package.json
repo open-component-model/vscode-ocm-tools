@@ -11,6 +11,10 @@
   "categories": [
     "Other"
   ],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/open-component-model/vscode-ocm-tools"
+	},
   "activationEvents": [
     "onCommand:ocm.helloWorld"
   ],
@@ -18,12 +22,20 @@
   "contributes": {
     "commands": [
       {
-        "command": "ocm.add",
+        "command": "ocm.remote.add",
         "title": "Add Component"
       },
       {
-        "command": "ocm.remove",
+        "command": "ocm.remote.remove",
         "title": "Remove Component"
+      },
+      {
+        "command": "ocm.resource.download",
+        "title": "Download resource to workspace"
+      },
+      {
+        "command": "ocm.component-version.download",
+        "title": "Download component to workspace"
       }
     ],
     "viewsContainers": {
@@ -31,7 +43,7 @@
         {
           "id": "ocm",
           "title": "Open Component Model",
-          "icon": "resources/icons/ocm.png"
+          "icon": "resources/icons/ocm.svg"
         }
       ]
     },
@@ -39,7 +51,7 @@
       "ocm": [
         {
           "id": "ocm.views.workspace",
-          "name": "Workspace Components"
+          "name": "Local Components"
         },
         {
           "id": "ocm.views.remote",
@@ -50,21 +62,31 @@
     "viewsWelcome": [
       {
         "view": "ocm.views.remote",
-        "contents": "No remote components found.\n[Add Component](command:ocm.add)"
+        "contents": "No remote components found.\n[Add Component from Repository](command:ocm.remote.add)"
       }
     ],
     "menus": {
       "view/title": [
         {
-          "command": "ocm.add",
+          "command": "ocm.remote.add",
           "when": "view == ocm.views.remote",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
-          "command": "ocm.remove",
+          "command": "ocm.remote.remove",
           "when": "view == ocm.views.remote && viewItem =~ /Component;/",
+          "group": "navigation@0"
+        },
+        {
+          "command": "ocm.resource.download",
+          "when": "viewItem =~ /Resource;/",
+          "group": "navigation@0"
+        },
+        {
+          "command": "ocm.component-version.download",
+          "when": "viewItem =~ /ComponentVersion;/",
           "group": "navigation@0"
         }
       ]

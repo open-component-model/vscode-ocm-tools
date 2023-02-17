@@ -1,5 +1,6 @@
 import path = require('path');
 import { commands, ThemeColor, ThemeIcon, TreeItem, TreeItemCollapsibleState, Uri } from 'vscode';
+import { asAbsolutePath } from '../../extensionContext';
 
 export const enum TreeNodeIcon {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -71,8 +72,8 @@ export class TreeNode extends TreeItem {
             this.iconPath = new ThemeIcon('circle-large-outline');
         } else if (typeof icon === 'string') {
             this.iconPath = {
-                light: path.join(`resources/icons/light/${icon}.svg`),
-                dark: path.join(`resources/icons/dark/${icon}.svg`),
+                light: asAbsolutePath(`resources/icons/light/${icon}.svg`),
+                dark: asAbsolutePath(`resources/icons/dark/${icon}.svg`),
             };
         } else {
             this.iconPath = icon;
@@ -97,13 +98,7 @@ export class TreeNode extends TreeItem {
     }
 
     // @ts-ignore
-    get command(): Command | undefined {
-        return {
-            command: "ocm-tools.open",
-            arguments: [],
-            title: 'View Resource',
-        };
-    }
+    get command(): Command | undefined {}
 
     	/**
 	 * VSCode contexts to use for setting {@link contextValue}

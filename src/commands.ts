@@ -1,32 +1,28 @@
-import { ExtensionContext, window } from 'vscode';
-import { getExtensionContext } from './extensionContext';
-import { AddComponentPanel } from './webviews/addComponent';
-import { ComponentNode } from './views/nodes/componentNode';
-import { GlobalState,GlobalStateKey } from './globalState';
-import { remoteTreeViewProvider } from './views/treeViews';
+import { commands } from "vscode";
+import { addRemoteComponent } from "./commands/addRemoteComponent";
+import { downloadComponent } from "./commands/downloadComponent";
+import { downloadResource } from "./commands/downloadResource";
+import { openDocument } from "./commands/openDocuments";
+import { removeRemoteComponent } from "./commands/removeRemoteComponent";
 
-export async function addComponent() {
-	AddComponentPanel.createOrShow(getExtensionContext());
+export enum CommandIDs {
+	componentVersionOpen = "ocm.component-version.open",
+	componentVersionDownload = "ocm.component-version.download",
+	resourceOpen = "ocm.resource.open",
+	resourceDownload = "ocm.resource.download",
+	sourceOpen = "ocm.source.open",
+	referenceOpen = "ocm.reference.open",
+	remoteComponentAdd = "ocm.remote.add",
+	remoteComponentRemove = "ocm.remote.remove",
 }
 
-export async function removeComponent(node: ComponentNode) {
-	let ctx: ExtensionContext = getExtensionContext();
-	let state: GlobalState = new GlobalState(ctx);
-
-	let components: string[] | undefined = state.get(GlobalStateKey.Components);
-	if (!components) {return ;}
-
-	let item: string = `${node.registry}//${node.name}`;
-
-	components = components.filter(x => x !== item);
-	
-	state.set(GlobalStateKey.Components, components);
-
-	remoteTreeViewProvider.refresh();
-
-	let msg: string = `Component removed: ${item}`;
-	window.showInformationMessage(msg, {
-		modal: false,
-	});
+export function registerCommands() {
+	commands.registerCommand(CommandIDs.componentVersionOpen, openDocument);
+	commands.registerCommand(CommandIDs.componentVersionDownload, downloadComponent);
+	commands.registerCommand(CommandIDs.resourceOpen, openDocument);
+	commands.registerCommand(CommandIDs.resourceDownload, downloadResource);
+	commands.registerCommand(CommandIDs.sourceOpen, openDocument);
+	commands.registerCommand(CommandIDs.referenceOpen, openDocument);
+	commands.registerCommand(CommandIDs.remoteComponentAdd, addRemoteComponent);
+	commands.registerCommand(CommandIDs.remoteComponentRemove, removeRemoteComponent);
 }
-

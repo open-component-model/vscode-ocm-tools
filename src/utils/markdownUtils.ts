@@ -2,8 +2,10 @@ import { MarkdownString } from 'vscode';
 import { ResourceTypes } from '../views/nodes/resourceNode';
 import { SourceTypes } from '../views/nodes/sourceNode';
 import { ReferenceTypes } from '../views/nodes/referenceNode';
+import { ComponentMeta } from '../views/componentDescriptorToNode';
+import { HttpsGardenerCloudSchemasComponentDescriptorOcmV3Alpha1 } from '../ocm/ocmv3';
 
-export type KnownTreeNodeResources = ResourceTypes | SourceTypes | ReferenceTypes;
+export type KnownTreeNodeResources = ResourceTypes | SourceTypes | ReferenceTypes | HttpsGardenerCloudSchemasComponentDescriptorOcmV3Alpha1;
 
 /**
  * Create markdown table for tree view item hovers.
@@ -11,7 +13,7 @@ export type KnownTreeNodeResources = ResourceTypes | SourceTypes | ReferenceType
  * @param kubernetesObject Standard kubernetes object
  * @returns vscode MarkdownString object
  */
-export function createMarkdownTable(obj: KnownTreeNodeResources): MarkdownString {
+export function createMarkdownTable(meta: ComponentMeta, obj: KnownTreeNodeResources): MarkdownString {
 	const markdown = new MarkdownString(undefined, true);
 	markdown.isTrusted = true;
 	// Create table header
@@ -19,9 +21,11 @@ export function createMarkdownTable(obj: KnownTreeNodeResources): MarkdownString
 	markdown.appendMarkdown(':--- | :---\n');
 
 	// Should exist on every object
-	createMarkdownTableRow('name', obj.name, markdown);
-	createMarkdownTableRow('version', obj.version, markdown);
-
+	createMarkdownTableRow('name', meta.name, markdown);
+	createMarkdownTableRow('version', meta.version, markdown);
+	if ("type" in obj && obj.type) {
+		createMarkdownTableRow('type', obj.type, markdown);
+	}
 
 	// Only show the first 10 lines (2 lines - header)
 	const markdownAsLines = markdown.value.split('\n');
@@ -40,7 +44,7 @@ export function createMarkdownTable(obj: KnownTreeNodeResources): MarkdownString
  * @param propertyValue Second table column value
  * @param markdown object of vscode type MarkdownString
  */
-function createMarkdownTableRow(propertyName: string, propertyValue: string | boolean | number | undefined, markdown: MarkdownString) {
+function createMarkdownTableRow(propertyName: string, propertyValue: string | boolean | number | undefined | {}, markdown: MarkdownString) {
 	if (propertyValue === undefined) {
 		return;
 	}
