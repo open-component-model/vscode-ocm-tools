@@ -7,6 +7,8 @@
 To preview the extension without running the debugger you can install the extension from a `vsix` file.
 
 The process is as follows:
+- Install npm, e.g. using `brew install npm`
+- Install the module "ts-loader": `npm install -D ts-loader`
 - Install the `vsce` compiler: `npm install -g @vscode/vsce`
 - Run the compiler against this project: `vsce package`
 - In vscode navigation to the "Extensions" tab and select "Install from VSIX..." from the menu
