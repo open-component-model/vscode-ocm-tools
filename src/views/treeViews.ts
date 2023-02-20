@@ -4,6 +4,7 @@ import { RemoteDataProvider } from './dataProviders/remoteDataProvider';
 
 import { ExtensionContext } from 'vscode';
 import { Views } from './views';
+import { TreeNode } from './nodes/treeNode';
 
 export let workspaceTreeViewProvider: WorkspaceDataProvider;
 export let remoteTreeViewProvider: RemoteDataProvider;
@@ -25,4 +26,12 @@ export function createTreeViews(context: ExtensionContext) {
 		treeDataProvider: remoteTreeViewProvider,
 		showCollapseAll: true,
 	});
+}
+
+export function refreshWorkspaceTreeView(node?: TreeNode) {
+	workspaceTreeViewProvider.refresh(node);
+}
+
+export function refreshRemoteTreeView(node?: TreeNode) {
+	remoteTreeViewProvider.refresh(node);
 }

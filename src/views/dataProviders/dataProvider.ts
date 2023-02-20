@@ -24,6 +24,7 @@ export class DataProvider implements TreeDataProvider<TreeItem> {
 			// Only clear all root nodes when no node was passed
 			this.treeItems = null;
 		}
+		this.buildTree();
 		this._onDidChangeTreeData.fire(treeItem);
 	}
 
