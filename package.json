@@ -32,11 +32,11 @@
       },
       {
         "command": "ocm.resource.download",
-        "title": "Download resource to workspace"
+        "title": "Download to workspace"
       },
       {
         "command": "ocm.component-version.download",
-        "title": "Download component to workspace"
+        "title": "Download to workspace"
       },
 			{
 				"command": "ocm.workspace.refresh",
@@ -46,12 +46,16 @@
 			},
       {
         "command": "ocm.component-version.sign",
-        "title": "Sign component version"
+        "title": "Sign"
       },
       {
         "command": "ocm.component-version.verify",
-        "title": "Verify component version"
-      },      
+        "title": "Verify"
+      },
+      {
+        "command": "ocm.component-version.transfer",
+        "title": "Transfer"
+      },
       {
         "command": "ocm.workspace.refresh",
         "title": "Refresh",
@@ -72,7 +76,7 @@
       },
       {
         "command": "ocm.keys.delete",
-        "title": "Delete Signing Key",
+        "title": "Delete",
         "category": "Open Component Model"
       }
     ],
@@ -132,7 +136,7 @@
           "command": "ocm.keys.createView",
           "when": "view == ocm.views.keys",
           "group": "navigation"
-        } 
+        }
       ],
       "view/item/context": [
         {
@@ -144,9 +148,14 @@
           "command": "ocm.component-version.verify",
           "when": "viewItem =~ /ComponentVersion;/",
           "group": "navigation@0"
-        },        
+        },
         {
           "command": "ocm.component-version.download",
+          "when": "viewItem =~ /ComponentVersion;/",
+          "group": "navigation@1"
+        },
+        {
+          "command": "ocm.component-version.transfer",
           "when": "viewItem =~ /ComponentVersion;/",
           "group": "navigation@1"
         },

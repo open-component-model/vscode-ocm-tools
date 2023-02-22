@@ -27,7 +27,7 @@ $createKeysButton.addEventListener('click', () => {
 		type: 'createSigningKeys',
 		value: {
 			// @ts-ignore
-			name: getInputValue(nameId.toLowerCase()),
+			name: getInputValue(nameId).toLowerCase(),
 			path: getInputValue(pathId),
 		},
 	});
