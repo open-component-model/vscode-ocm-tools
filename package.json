@@ -56,10 +56,15 @@
         "icon": "$(refresh)"
       },
       {
-        "command": "ocm.config.keys.createView",
+        "command": "ocm.keys.createView",
         "title": "Create Signing Keys",
         "category": "Open Component Model",
         "icon": "$(add)"
+      },
+      {
+        "command": "ocm.keys.delete",
+        "title": "Delete Signing Key",
+        "category": "Open Component Model"
       }
     ],
     "viewsContainers": {
@@ -94,7 +99,7 @@
       },
       {
         "view": "ocm.views.keys",
-        "contents": "No keys found.\n[Create Key Pair](command:ocm.config.keys.createView)"
+        "contents": "No keys found.\n[Create Key Pair](command:ocm.keys.createView)"
       }
     ],
     "menus": {
@@ -129,6 +134,11 @@
         {
           "command": "ocm.component-version.download",
           "when": "viewItem =~ /ComponentVersion;/",
+          "group": "navigation@0"
+        },
+        {
+          "command": "ocm.keys.delete",
+          "when": "view == ocm.views.keys && viewItem =~ /Key;/",
           "group": "navigation@0"
         }
       ]

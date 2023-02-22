@@ -1,10 +1,12 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import {  workspace } from 'vscode';
+import { workspace } from 'vscode';
 import YAML from 'yaml';
 import { exec } from '../exec';
 import { getExtensionContext } from '../extensionContext';
 import { OCMConfigTypes } from '../ocm/configTypes';
+import { resolveTilde } from '../utils/pathUtils';
+import { keyTreeViewProvider } from '../views/treeViews';
 import { CreateSigningKeysPanel } from '../webviews/createSigningKeys';
 
 export async function createSigningKeysView() {
@@ -47,6 +49,7 @@ export async function createSigningKeys(path: string, name: string): Promise<voi
 
 	writeFileSync(resolveTilde(configPath), YAML.stringify(configFile));
 
+	keyTreeViewProvider.refresh();
 	// add key view nodes and data provider
 
 	// enable adding existing keys and updating the config
@@ -55,22 +58,3 @@ export async function createSigningKeys(path: string, name: string): Promise<voi
 
 	// when signing components let the user choose the signing key from 
 }
-
-/**
- * Resolves paths that start with a tilde to the user's home directory.
- *
- * @param  {string} filePath '~/GitHub/Repo/file.png'
- * @return {string}          '/home/bob/GitHub/Repo/file.png'
- */
-function resolveTilde(filePath: string): string {
-	const os = require('os');
-	if (!filePath || typeof(filePath) !== 'string') {
-	  return '';
-	}
-  
-	if (filePath.startsWith('~/') || filePath === '~') {
-	  return filePath.replace('~', os.homedir());
-	}
-  
-	return filePath;
-  }
