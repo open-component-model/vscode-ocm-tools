@@ -9,7 +9,7 @@ export async function transferComponent(node: ComponentVersionNode | ComponentNo
     const component = getComponentURI(node.meta);
     let target = await window.showInputBox({title: "Transfer Component",prompt: "Enter the url of an OCM Repository, e.g. 'ghcr.io/acme'"});
     if (!target) { return; }
-    const cmd = `ocm transfer component ${component} ${target}`;
+    const cmd = `ocm transfer component -f ${component} ${target}`;
     console.log(cmd);
     const res = await exec(cmd, { silent: false });
     window.showInformationMessage(res.stdout);

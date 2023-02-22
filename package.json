@@ -38,12 +38,12 @@
         "command": "ocm.component-version.download",
         "title": "Download to workspace"
       },
-			{
-				"command": "ocm.workspace.refresh",
-				"title": "Refresh",
-				"category": "Open Component Model",
-				"icon": "$(refresh)"
-			},
+      {
+        "command": "ocm.workspace.refresh",
+        "title": "Refresh",
+        "category": "Open Component Model",
+        "icon": "$(refresh)"
+      },
       {
         "command": "ocm.component-version.sign",
         "title": "Sign"
@@ -128,8 +128,8 @@
           "group": "navigation"
         },
         {
-					"command": "ocm.workspace.refresh",
-					"when": "view == ocm.views.workspace",
+          "command": "ocm.workspace.refresh",
+          "when": "view == ocm.views.workspace",
           "group": "navigation"
         },
         {
