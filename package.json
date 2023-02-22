@@ -11,10 +11,10 @@
   "categories": [
     "Other"
   ],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/open-component-model/vscode-ocm-tools"
-	},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/open-component-model/vscode-ocm-tools"
+  },
   "activationEvents": [
     "onCommand:ocm.helloWorld"
   ],
@@ -48,7 +48,7 @@
 				"title": "Refresh",
 				"category": "Open Component Model",
 				"icon": "$(refresh)"
-			}        
+			}
     ],
     "viewsContainers": {
       "activitybar": [
@@ -88,11 +88,11 @@
           "command": "ocm.remote.refresh",
           "when": "view == ocm.views.remote",
           "group": "navigation"
-        },      
+        },
         {
 					"command": "ocm.workspace.refresh",
 					"when": "view == ocm.views.workspace",
-          "group": "navigation"     
+          "group": "navigation"
 				}
       ],
       "view/item/context": [
@@ -112,6 +112,16 @@
           "group": "navigation@0"
         }
       ]
+    },
+    "configuration": {
+      "title": "Open Component Model",
+      "properties": {
+        "openComponentModel.configurationFile": {
+          "type": "string",
+          "default": "~/.ocmconfig",
+          "description": "Path to the OCM CLI configuration file"
+        }
+      }
     }
   },
   "scripts": {
