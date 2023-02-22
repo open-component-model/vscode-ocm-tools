@@ -36,7 +36,19 @@
       {
         "command": "ocm.component-version.download",
         "title": "Download component to workspace"
-      }
+      },
+			{
+				"command": "ocm.workspace.refresh",
+				"title": "Refresh",
+				"category": "Open Component Model",
+				"icon": "$(refresh)"
+			},
+      {
+				"command": "ocm.remote.refresh",
+				"title": "Refresh",
+				"category": "Open Component Model",
+				"icon": "$(refresh)"
+			}        
     ],
     "viewsContainers": {
       "activitybar": [
@@ -71,7 +83,17 @@
           "command": "ocm.remote.add",
           "when": "view == ocm.views.remote",
           "group": "navigation"
-        }
+        },
+        {
+          "command": "ocm.remote.refresh",
+          "when": "view == ocm.views.remote",
+          "group": "navigation"
+        },      
+        {
+					"command": "ocm.workspace.refresh",
+					"when": "view == ocm.views.workspace",
+          "group": "navigation"     
+				}
       ],
       "view/item/context": [
         {

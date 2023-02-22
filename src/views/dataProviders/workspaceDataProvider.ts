@@ -13,19 +13,19 @@ export class WorkspaceDataProvider extends DataProvider {
       return [];
     }
 
-    let workspaceRoot = vscode.workspace.workspaceFolders[0].uri.path;
+    let workspaceRoot = vscode.workspace.workspaceFolders[0].uri.path.replace("/c:","");
 
     let nodes: {[key: string]: TreeNode} = {};
 
     for await (const path of walk(workspaceRoot)) {
-      for await (const cd of fetchComponents(path)) {
+      for await (const cd of fetchComponents(path.replace("\\Users","C:\\Users"))) {
         let meta: ComponentMeta = getComponentDescriptorMeta(cd);
 
         if (!nodes.hasOwnProperty(meta.name)) {
           nodes[meta.name] = new ComponentNode(meta.name, meta.provider);
         }
         
-        let node = componentDescriptorParser(cd, path);
+        let node = componentDescriptorParser(cd, path.replace("\\Users","C:\\Users"));
         nodes[meta.name].addChild(node);
       }
 
@@ -38,7 +38,7 @@ export class WorkspaceDataProvider extends DataProvider {
 async function* walk(dir: string): AsyncGenerator<string, any, void> {
   for await (const d of await fs.promises.opendir(dir)) {
     const entry = path.join(dir, d.name);
-    if (d.isDirectory()) { yield* walk(entry); }
+    if (d.isDirectory() && d.name !== ".git") { yield* walk(entry); }
     else if (d.isFile() && d.name === "component-descriptor.yaml" || d.name === "artifact-index.json") { yield dir; };
   }
 }
