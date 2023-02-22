@@ -11,6 +11,8 @@ export type ComponentMeta = {
     version: string
     registry: string
     path: string
+    signed: boolean
+    verified: boolean
 };
 
 export function getComponentURI(meta: ComponentMeta): string {

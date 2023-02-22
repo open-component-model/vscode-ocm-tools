@@ -23,7 +23,8 @@
     "commands": [
       {
         "command": "ocm.remote.add",
-        "title": "Add Component"
+        "title": "Add Component",
+        "icon": "$(add)"
       },
       {
         "command": "ocm.remote.remove",
@@ -43,6 +44,14 @@
 				"category": "Open Component Model",
 				"icon": "$(refresh)"
 			},
+      {
+        "command": "ocm.component-version.sign",
+        "title": "Sign component version"
+      },
+      {
+        "command": "ocm.component-version.verify",
+        "title": "Verify component version"
+      },      
       {
         "command": "ocm.workspace.refresh",
         "title": "Refresh",
@@ -95,7 +104,7 @@
     "viewsWelcome": [
       {
         "view": "ocm.views.remote",
-        "contents": "No remote components found.\n[Add Component from Repository](command:ocm.remote.add)"
+        "contents": "No remote components found.\n[Add Component](command:ocm.remote.add)"
       },
       {
         "view": "ocm.views.keys",
@@ -118,9 +127,29 @@
 					"command": "ocm.workspace.refresh",
 					"when": "view == ocm.views.workspace",
           "group": "navigation"
-        }
+        },
+        {
+          "command": "ocm.keys.createView",
+          "when": "view == ocm.views.keys",
+          "group": "navigation"
+        } 
       ],
       "view/item/context": [
+        {
+          "command": "ocm.component-version.sign",
+          "when": "viewItem =~ /ComponentVersion;/",
+          "group": "navigation@0"
+        },
+        {
+          "command": "ocm.component-version.verify",
+          "when": "viewItem =~ /ComponentVersion;/",
+          "group": "navigation@0"
+        },        
+        {
+          "command": "ocm.component-version.download",
+          "when": "viewItem =~ /ComponentVersion;/",
+          "group": "navigation@1"
+        },
         {
           "command": "ocm.remote.remove",
           "when": "view == ocm.views.remote && viewItem =~ /Component;/",
@@ -129,11 +158,6 @@
         {
           "command": "ocm.resource.download",
           "when": "viewItem =~ /Resource;/",
-          "group": "navigation@0"
-        },
-        {
-          "command": "ocm.component-version.download",
-          "when": "viewItem =~ /ComponentVersion;/",
           "group": "navigation@0"
         },
         {

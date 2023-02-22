@@ -7,10 +7,14 @@ import { downloadResource } from "./commands/downloadResource";
 import { openDocument } from "./commands/openDocuments";
 import { removeRemoteComponent } from "./commands/removeRemoteComponent";
 import { refreshRemoteTreeView, refreshWorkspaceTreeView } from "./views/treeViews";
+import { signComponent } from "./commands/signComponent";
+import { verifyComponent } from "./commands/verifyComponent";
 
 export enum CommandIDs {
 	componentVersionOpen = "ocm.component-version.open",
 	componentVersionDownload = "ocm.component-version.download",
+	componentVersionSign = "ocm.component-version.sign",
+	componentVersionVerify = "ocm.component-version.verify",
 	resourceOpen = "ocm.resource.open",
 	resourceDownload = "ocm.resource.download",
 	sourceOpen = "ocm.source.open",
@@ -27,6 +31,9 @@ export enum CommandIDs {
 export function registerCommands() {
 	commands.registerCommand(CommandIDs.componentVersionOpen, openDocument);
 	commands.registerCommand(CommandIDs.componentVersionDownload, downloadComponent);
+	commands.registerCommand(CommandIDs.componentVersionSign, signComponent);
+	commands.registerCommand(CommandIDs.componentVersionVerify, verifyComponent);
+
 	commands.registerCommand(CommandIDs.resourceOpen, openDocument);
 	commands.registerCommand(CommandIDs.resourceDownload, downloadResource);
 	commands.registerCommand(CommandIDs.sourceOpen, openDocument);

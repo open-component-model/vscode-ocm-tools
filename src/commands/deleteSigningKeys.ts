@@ -1,25 +1,20 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { workspace } from 'vscode';
 import YAML from 'yaml';
 import util from 'util';
-import { exec } from '../exec';
-import { getExtensionContext } from '../extensionContext';
 import { KeyEntry, OCMConfigTypes } from '../ocm/configTypes';
 import { resolveTilde } from '../utils/pathUtils';
 import { KeyNode } from '../views/nodes/keyNode';
 import { keyTreeViewProvider } from '../views/treeViews';
+import { getConfigFile } from '../ocm/getConfigFile';
+import { writeConfigFile } from '../ocm/writeConfigFile';
 
 export async function deleteSigningKeys(key: KeyNode): Promise<void> {
 	const keyDir = resolveTilde(key.path);
 	const privateKey = join(keyDir, key.name + ".key");
 	const publicKey = join(keyDir, key.name + ".pub");
-
-	const configPath: string | undefined = workspace.getConfiguration("openComponentModel").get("configurationFile");
-	if (!configPath) { return; }
-
-	const configData = readFileSync(resolveTilde(configPath));
-	const configFile = YAML.parse(configData.toString());
+	const configFile = getConfigFile();
 	const keyElement: KeyEntry = {
 		"type": OCMConfigTypes.signingConfigType,
 		"privateKeys": {
@@ -36,7 +31,7 @@ export async function deleteSigningKeys(key: KeyNode): Promise<void> {
 
 	configFile.configurations = configFile.configurations.filter((element: KeyEntry) => !util.isDeepStrictEqual(element,keyElement));
 
-	writeFileSync(resolveTilde(configPath), YAML.stringify(configFile));
+	writeConfigFile(configFile);
 
 	keyTreeViewProvider.refresh();
 }
