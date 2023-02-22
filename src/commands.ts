@@ -1,5 +1,6 @@
 import { commands } from "vscode";
 import { addRemoteComponent } from "./commands/addRemoteComponent";
+import { createSigningKeys, createSigningKeysView } from "./commands/createSigningKeys";
 import { downloadComponent } from "./commands/downloadComponent";
 import { downloadResource } from "./commands/downloadResource";
 import { openDocument } from "./commands/openDocuments";
@@ -17,6 +18,8 @@ export enum CommandIDs {
 	remoteComponentRemove = "ocm.remote.remove",
 	remoteTreeViewRefresh = "ocm.remote.refresh",
 	workspaceTreeViewRefresh = "ocm.workspace.refresh"
+	createSigningKeys = "ocm.config.keys.create",
+	createSigningKeysView = "ocm.config.keys.createView"
 }
 
 export function registerCommands() {
@@ -31,4 +34,7 @@ export function registerCommands() {
 
 	commands.registerCommand(CommandIDs.remoteTreeViewRefresh, refreshRemoteTreeView);
 	commands.registerCommand(CommandIDs.workspaceTreeViewRefresh, refreshWorkspaceTreeView);
+	commands.registerCommand(CommandIDs.createSigningKeys, createSigningKeys);
+	commands.registerCommand(CommandIDs.createSigningKeysView, createSigningKeysView);
+
 }

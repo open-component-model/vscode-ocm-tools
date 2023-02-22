@@ -4,19 +4,20 @@ import { getNonce, getWebviewOptions } from './webviewUtils';
 import { asAbsolutePath } from '../extensionContext';
 import { GlobalState, GlobalStateKey } from '../globalState';
 import { remoteTreeViewProvider } from '../views/treeViews';
+import { createSigningKeys } from '../commands/createSigningKeys';
 /**
  * Message sent to webview to initialize it.
  */
-interface AddKeysWebviewContent {
+interface CreateSigningKeysWebviewContent {
 	type: 'updateWebviewContent';
 	value: {};
 }
 
-export interface AddKeys {
-	type: 'AddKeys';
+export interface CreateSigningKeys {
+	type: 'createSigningKeys';
 	value: {
-		repositoryURL: string;
-		componentName: string;
+		name: string;
+		path: string;
 	};
 }
 
@@ -34,21 +35,21 @@ export interface WebviewLoaded {
 }
 
 /** Message sent from Extension to Webview */
-export type MessageToWebview = AddKeysWebviewContent;
+export type MessageToWebview = CreateSigningKeysWebviewContent;
 
 /** Message sent from Webview to Extension */
-export type MessageFromWebview = AddKeys | ShowNotification | WebviewLoaded;
+export type MessageFromWebview = CreateSigningKeys | ShowNotification | WebviewLoaded;
 
 /**
  * Manages create source webview panel.
  */
-export class AddKeysPanel {
+export class CreateSigningKeysPanel {
 	/**
 	 * Track the currently panel. Only allow a single panel to exist at a time.
 	 */
-	public static currentPanel: AddKeysPanel | undefined;
+	public static currentPanel: CreateSigningKeysPanel | undefined;
 
-	public static readonly viewType = 'AddKeys';
+	public static readonly viewType = 'createSigningKeys';
 
 	private readonly _panel: WebviewPanel;
 	private readonly _extensionUri: Uri;
@@ -63,24 +64,24 @@ export class AddKeysPanel {
 		let extensionUri: Uri = context.extensionUri;
 
 		// If we already have a panel, show it.
-		if (AddKeysPanel.currentPanel) {
-			AddKeysPanel.currentPanel._panel.reveal(column);
+		if (CreateSigningKeysPanel.currentPanel) {
+			CreateSigningKeysPanel.currentPanel._panel.reveal(column);
 			return;
 		}
 
 		// Otherwise, create a new panel.
 		const panel = window.createWebviewPanel(
-			AddKeysPanel.viewType,
-			'Add Component',
+			CreateSigningKeysPanel.viewType,
+			'Add Keys',
 			column || ViewColumn.One,
 			getWebviewOptions(extensionUri),
 		);
 
-		AddKeysPanel.currentPanel = new AddKeysPanel(panel, extensionUri, context);
+		CreateSigningKeysPanel.currentPanel = new CreateSigningKeysPanel(panel, extensionUri, context);
 	}
 
 	public static revive(panel: WebviewPanel, extensionUri: Uri, context: ExtensionContext) {
-		AddKeysPanel.currentPanel = new AddKeysPanel(panel, extensionUri, context);
+		CreateSigningKeysPanel.currentPanel = new CreateSigningKeysPanel(panel, extensionUri, context);
 	}
 
 	private constructor(panel: WebviewPanel, extensionUri: Uri, context: ExtensionContext) {
@@ -97,7 +98,6 @@ export class AddKeysPanel {
 
 		// Update the content based on view changes
 		this._panel.onDidChangeViewState(e => {
-			console.log(e);
 			if (this._panel.visible) {
 				this._update();
 			}
@@ -106,13 +106,14 @@ export class AddKeysPanel {
 		// Handle messages from the webview
 		this._panel.webview.onDidReceiveMessage(async (message: MessageFromWebview) => {
 			switch (message.type) {
-				case 'AddKeys': {
-					//TODO:  validation before adding component to remote list
-					const msg = `Added keys ${message.value}`;
+				case 'createSigningKeys': {
+					const msg = `Creating keypair: ${message.value.name}`;
 
 					window.showInformationMessage(msg, {
 						modal: false,
 					});
+
+					await createSigningKeys(message.value.path,message.value.name);
 
 					this.dispose();
 					break;
@@ -135,7 +136,7 @@ export class AddKeysPanel {
 	}
 
 	public dispose() {
-		AddKeysPanel.currentPanel = undefined;
+		CreateSigningKeysPanel.currentPanel = undefined;
 
 		// Clean up our resources
 		this._panel.dispose();
@@ -168,7 +169,7 @@ export class AddKeysPanel {
 
 	private _getHtmlForWebview(webview: Webview) {
 		// Local path to main script run in the webview
-		const scriptPathOnDisk = Uri.joinPath(this._extensionUri, 'media', 'AddKeys.js');
+		const scriptPathOnDisk = Uri.joinPath(this._extensionUri, 'media', 'createSigningKeys', 'view.js');
 
 		// And the uri we use to load this script in the webview
 		const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
@@ -176,7 +177,7 @@ export class AddKeysPanel {
 		// Local path to css styles
 		const styleResetPath = Uri.joinPath(this._extensionUri, 'media', 'reset.css');
 		const styleVSCodePath = Uri.joinPath(this._extensionUri, 'media', 'vscode.css');
-		const stylesPathMainPath = Uri.joinPath(this._extensionUri, 'media', 'AddKeys.css');
+		const stylesPathMainPath = Uri.joinPath(this._extensionUri, 'media', 'createSigningKeys', 'view.css');
 
 		// Uri to load styles into webview
 		const stylesResetUri = webview.asWebviewUri(styleResetPath);
@@ -205,7 +206,7 @@ export class AddKeysPanel {
 			</head>
 			<body>
 				<main class="app">
-					${readFileSync(asAbsolutePath('./media/AddKeys.html').fsPath).toString()}
+					${readFileSync(asAbsolutePath('./media/createSigningKeys/view.html').fsPath).toString()}
 				</main>
 				<script nonce="${nonce}" src="${scriptUri}" defer></script>
 			</body>

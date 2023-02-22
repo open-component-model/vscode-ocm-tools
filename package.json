@@ -44,11 +44,23 @@
 				"icon": "$(refresh)"
 			},
       {
-				"command": "ocm.remote.refresh",
-				"title": "Refresh",
-				"category": "Open Component Model",
-				"icon": "$(refresh)"
-			}
+        "command": "ocm.workspace.refresh",
+        "title": "Refresh",
+        "category": "Open Component Model",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "ocm.remote.refresh",
+        "title": "Refresh",
+        "category": "Open Component Model",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "ocm.config.keys.createView",
+        "title": "Create Signing Keys",
+        "category": "Open Component Model",
+        "icon": "$(add)"
+      }
     ],
     "viewsContainers": {
       "activitybar": [
@@ -68,6 +80,10 @@
         {
           "id": "ocm.views.remote",
           "name": "Component Repositories"
+        },
+        {
+          "id": "ocm.views.keys",
+          "name": "Signing Keys"
         }
       ]
     },
@@ -75,6 +91,10 @@
       {
         "view": "ocm.views.remote",
         "contents": "No remote components found.\n[Add Component from Repository](command:ocm.remote.add)"
+      },
+      {
+        "view": "ocm.views.keys",
+        "contents": "No keys found.\n[Create Key Pair](command:ocm.config.keys.createView)"
       }
     ],
     "menus": {
@@ -93,7 +113,7 @@
 					"command": "ocm.workspace.refresh",
 					"when": "view == ocm.views.workspace",
           "group": "navigation"
-				}
+        }
       ],
       "view/item/context": [
         {

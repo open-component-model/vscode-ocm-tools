@@ -182,7 +182,7 @@ export class AddComponentPanel {
 
 	private _getHtmlForWebview(webview: Webview) {
 		// Local path to main script run in the webview
-		const scriptPathOnDisk = Uri.joinPath(this._extensionUri, 'media', 'addComponent.js');
+		const scriptPathOnDisk = Uri.joinPath(this._extensionUri, 'media', 'addComponent', 'view.js');
 
 		// And the uri we use to load this script in the webview
 		const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
@@ -190,7 +190,7 @@ export class AddComponentPanel {
 		// Local path to css styles
 		const styleResetPath = Uri.joinPath(this._extensionUri, 'media', 'reset.css');
 		const styleVSCodePath = Uri.joinPath(this._extensionUri, 'media', 'vscode.css');
-		const stylesPathMainPath = Uri.joinPath(this._extensionUri, 'media', 'addComponent.css');
+		const stylesPathMainPath = Uri.joinPath(this._extensionUri, 'media', 'addComponent', 'view.css');
 
 		// Uri to load styles into webview
 		const stylesResetUri = webview.asWebviewUri(styleResetPath);
@@ -219,7 +219,7 @@ export class AddComponentPanel {
 			</head>
 			<body>
 				<main class="app">
-					${readFileSync(asAbsolutePath('./media/addComponent.html').fsPath).toString()}
+					${readFileSync(asAbsolutePath('./media/addComponent/view.html').fsPath).toString()}
 				</main>
 				<script nonce="${nonce}" src="${scriptUri}" defer></script>
 			</body>
