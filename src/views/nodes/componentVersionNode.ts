@@ -2,6 +2,7 @@ import { HttpsGardenerCloudSchemasComponentDescriptorOcmV3Alpha1 as ComponentDes
 import { ComponentMeta } from '../componentDescriptorToNode';
 import { OCMNode } from './ocmNode';
 import { CommandIDs } from '../../commands';
+import { ThemeColor, ThemeIcon } from 'vscode';
 
 /**
  * Base class for all the OCM tree view items.
@@ -38,5 +39,9 @@ export class ComponentVersionNode extends OCMNode {
 			arguments: [this.meta, this.resource, this.kind],
 			title: 'View Component Descriptor',
 		};
+	}
+
+	isSigned(value: boolean) {
+		this.meta.signed = value;
 	}
 }

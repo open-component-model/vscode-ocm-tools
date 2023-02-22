@@ -5,38 +5,37 @@ const vscode = acquireVsCodeApi();
 /**
  *
  * @type { {
- * repository: string;
- * componentName: string;
- * }}
+ * name: string;
+ * path: string;
+* }}
  */
 const webviewTempState = {
-	repository: '',
-	componentName: '',
+	name: '',
+	path: '',
 };
 
-// Generic cluster input ids
-const repositoryId = 'repository';
-const componentId = 'component';
+const nameId = 'name';
+const pathId = 'path';
 
 // Inputs
-const $repository = /** @type HTMLInputElement */ (document.getElementById(repositoryId));
-const $component = /** @type HTMLInputElement */ (document.getElementById(componentId));
-const $submitButton = /** @type HTMLButtonElement */ (document.getElementById('add-component'));
+const $name = /** @type HTMLInputElement */ (document.getElementById(nameId));
+const $path = /** @type HTMLInputElement */ (document.getElementById(pathId));
+const $createKeysButton = /** @type HTMLButtonElement */ (document.getElementById('create-keys'));
 
-$submitButton.addEventListener('click', () => {
+$createKeysButton.addEventListener('click', () => {
 	postVSCodeMessage({
-		type: 'addComponent',
+		type: 'createSigningKeys',
 		value: {
 			// @ts-ignore
-			repositoryURL: getInputValue(repositoryId),
-			componentName: getInputValue(componentId),
+			name: getInputValue(nameId).toLowerCase(),
+			path: getInputValue(pathId),
 		},
 	});
 });
 
 // ────────────────────────────────────────────────────────────
 /**
- * @param message {import('../src/webviews/addComponent').MessageFromWebview}
+ * @param message {import('../../src/webviews/createSigningKeys').MessageFromWebview}
  */
 function postVSCodeMessage(message) {
 	vscode.postMessage(message);
@@ -65,7 +64,7 @@ function getInputValue(inputId) {
 }
 
 window.addEventListener('message', event => {
-	/** @type {import('../src/webviews/addComponent').MessageToWebview} */
+	/** @type {import('../../src/webviews/createSigningKeys').MessageToWebview} */
 	const message = event.data;
 
 	switch (message.type) {

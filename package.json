@@ -11,10 +11,10 @@
   "categories": [
     "Other"
   ],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/open-component-model/vscode-ocm-tools"
-	},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/open-component-model/vscode-ocm-tools"
+  },
   "activationEvents": [
     "onCommand:ocm.helloWorld"
   ],
@@ -23,7 +23,8 @@
     "commands": [
       {
         "command": "ocm.remote.add",
-        "title": "Add Component"
+        "title": "Add Component",
+        "icon": "$(add)"
       },
       {
         "command": "ocm.remote.remove",
@@ -31,24 +32,53 @@
       },
       {
         "command": "ocm.resource.download",
-        "title": "Download resource to workspace"
+        "title": "Download to workspace"
       },
       {
         "command": "ocm.component-version.download",
-        "title": "Download component to workspace"
+        "title": "Download to workspace"
       },
-			{
-				"command": "ocm.workspace.refresh",
-				"title": "Refresh",
-				"category": "Open Component Model",
-				"icon": "$(refresh)"
-			},
       {
-				"command": "ocm.remote.refresh",
-				"title": "Refresh",
-				"category": "Open Component Model",
-				"icon": "$(refresh)"
-			}        
+        "command": "ocm.workspace.refresh",
+        "title": "Refresh",
+        "category": "Open Component Model",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "ocm.component-version.sign",
+        "title": "Sign"
+      },
+      {
+        "command": "ocm.component-version.verify",
+        "title": "Verify"
+      },
+      {
+        "command": "ocm.component-version.transfer",
+        "title": "Transfer"
+      },
+      {
+        "command": "ocm.workspace.refresh",
+        "title": "Refresh",
+        "category": "Open Component Model",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "ocm.remote.refresh",
+        "title": "Refresh",
+        "category": "Open Component Model",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "ocm.keys.createView",
+        "title": "Create Signing Keys",
+        "category": "Open Component Model",
+        "icon": "$(add)"
+      },
+      {
+        "command": "ocm.keys.delete",
+        "title": "Delete",
+        "category": "Open Component Model"
+      }
     ],
     "viewsContainers": {
       "activitybar": [
@@ -68,13 +98,21 @@
         {
           "id": "ocm.views.remote",
           "name": "Component Repositories"
+        },
+        {
+          "id": "ocm.views.keys",
+          "name": "Signing Keys"
         }
       ]
     },
     "viewsWelcome": [
       {
         "view": "ocm.views.remote",
-        "contents": "No remote components found.\n[Add Component from Repository](command:ocm.remote.add)"
+        "contents": "No remote components found.\n[Add Component](command:ocm.remote.add)"
+      },
+      {
+        "view": "ocm.views.keys",
+        "contents": "No keys found.\n[Create Key Pair](command:ocm.keys.createView)"
       }
     ],
     "menus": {
@@ -88,14 +126,39 @@
           "command": "ocm.remote.refresh",
           "when": "view == ocm.views.remote",
           "group": "navigation"
-        },      
+        },
         {
-					"command": "ocm.workspace.refresh",
-					"when": "view == ocm.views.workspace",
-          "group": "navigation"     
-				}
+          "command": "ocm.workspace.refresh",
+          "when": "view == ocm.views.workspace",
+          "group": "navigation"
+        },
+        {
+          "command": "ocm.keys.createView",
+          "when": "view == ocm.views.keys",
+          "group": "navigation"
+        }
       ],
       "view/item/context": [
+        {
+          "command": "ocm.component-version.sign",
+          "when": "viewItem =~ /ComponentVersion;/",
+          "group": "navigation@0"
+        },
+        {
+          "command": "ocm.component-version.verify",
+          "when": "viewItem =~ /ComponentVersion;/",
+          "group": "navigation@0"
+        },
+        {
+          "command": "ocm.component-version.download",
+          "when": "viewItem =~ /ComponentVersion;/",
+          "group": "navigation@1"
+        },
+        {
+          "command": "ocm.component-version.transfer",
+          "when": "viewItem =~ /ComponentVersion;/",
+          "group": "navigation@1"
+        },
         {
           "command": "ocm.remote.remove",
           "when": "view == ocm.views.remote && viewItem =~ /Component;/",
@@ -107,11 +170,21 @@
           "group": "navigation@0"
         },
         {
-          "command": "ocm.component-version.download",
-          "when": "viewItem =~ /ComponentVersion;/",
+          "command": "ocm.keys.delete",
+          "when": "view == ocm.views.keys && viewItem =~ /Key;/",
           "group": "navigation@0"
         }
       ]
+    },
+    "configuration": {
+      "title": "Open Component Model",
+      "properties": {
+        "openComponentModel.configurationFile": {
+          "type": "string",
+          "default": "~/.ocmconfig",
+          "description": "Path to the OCM CLI configuration file"
+        }
+      }
     }
   },
   "scripts": {
