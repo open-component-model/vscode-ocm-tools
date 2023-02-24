@@ -57,6 +57,10 @@
         "title": "Transfer"
       },
       {
+        "command": "ocm.component-version.transfer-by-value",
+        "title": "Transfer (copy resources)"
+      },
+      {
         "command": "ocm.workspace.refresh",
         "title": "Refresh",
         "category": "Open Component Model",
@@ -159,6 +163,11 @@
           "when": "viewItem =~ /ComponentVersion;/",
           "group": "navigation@1"
         },
+        {
+          "command": "ocm.component-version.transfer-by-value",
+          "when": "viewItem =~ /ComponentVersion;/",
+          "group": "navigation@1"
+        },        
         {
           "command": "ocm.remote.remove",
           "when": "view == ocm.views.remote && viewItem =~ /Component;/",
