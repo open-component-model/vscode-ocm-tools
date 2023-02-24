@@ -21,6 +21,7 @@ export async function verifyComponent(node: ComponentVersionNode | ComponentNode
     let result = await window.showQuickPick(Object.keys(keys), { title: "Select a signing key..."});
     if (!result) { return; }
     const cmd = `ocm component verify --signature ${result} --public-key ${keys[result]} ${component}`;
+    window.showInformationMessage(`Verifying component: ${component}`);
     const res = await exec(cmd, { silent: false });
-    window.showInformationMessage(res.stdout);
+    window.showInformationMessage(`Verification result: ${res.stdout}`);
 }
