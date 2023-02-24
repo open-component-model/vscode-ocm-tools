@@ -21,6 +21,7 @@ export async function signComponent(node: ComponentVersionNode | ComponentNode) 
     let result = await window.showQuickPick(keys, { title: "Select a signing key..."});
     if (!result) { return; }
     const cmd = `ocm component sign --signature ${result} ${component}`;
+    window.showInformationMessage(`Signing component: ${component}`);
     const res = await exec(cmd, { silent: false });
-    window.showInformationMessage(res.stdout);
+    window.showInformationMessage(`Signing result: ${res.stdout}`);
 }
