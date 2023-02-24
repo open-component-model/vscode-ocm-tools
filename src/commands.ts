@@ -10,6 +10,7 @@ import { refreshRemoteTreeView, refreshWorkspaceTreeView } from "./views/treeVie
 import { signComponent } from "./commands/signComponent";
 import { transferComponent } from "./commands/transferComponent";
 import { verifyComponent } from "./commands/verifyComponent";
+import { transferComponentByValue } from "./commands/transferComponentByValue";
 
 export enum CommandIDs {
 	componentVersionOpen = "ocm.component-version.open",
@@ -17,6 +18,7 @@ export enum CommandIDs {
 	componentVersionSign = "ocm.component-version.sign",
 	componentVersionVerify = "ocm.component-version.verify",
 	componentVersionTransfer = "ocm.component-version.transfer",
+	componentVersionTransferByValue = "ocm.component-version.transfer-by-value",
 
 	resourceOpen = "ocm.resource.open",
 	resourceDownload = "ocm.resource.download",
@@ -37,6 +39,8 @@ export function registerCommands() {
 	commands.registerCommand(CommandIDs.componentVersionSign, signComponent);
 	commands.registerCommand(CommandIDs.componentVersionVerify, verifyComponent);
 	commands.registerCommand(CommandIDs.componentVersionTransfer, transferComponent);
+	commands.registerCommand(CommandIDs.componentVersionTransferByValue, transferComponentByValue);
+
 
 	commands.registerCommand(CommandIDs.resourceOpen, openDocument);
 	commands.registerCommand(CommandIDs.resourceDownload, downloadResource);

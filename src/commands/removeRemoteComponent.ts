@@ -9,7 +9,7 @@ export async function removeRemoteComponent(node: ComponentNode) {
 	let state: GlobalState = new GlobalState(ctx);
 	let existingComponents: string[] | undefined = state.get(GlobalStateKey.Components);
 	if (!existingComponents) { return; }
-	let component: string = `${node.registry}//${node.name}`;
+	let component: string = `${node.meta.registry}//${node.meta.name}`;
 	state.set(GlobalStateKey.Components, existingComponents.filter(x => x !== component));
 	remoteTreeViewProvider.refresh();
 	let msg: string = `Component removed: ${component}`;
