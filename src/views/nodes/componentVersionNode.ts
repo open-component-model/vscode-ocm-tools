@@ -2,7 +2,6 @@ import { HttpsGardenerCloudSchemasComponentDescriptorOcmV3Alpha1 as ComponentDes
 import { ComponentMeta } from '../componentDescriptorToNode';
 import { OCMNode } from './ocmNode';
 import { CommandIDs } from '../../commands';
-import { ThemeColor, ThemeIcon } from 'vscode';
 
 /**
  * Base class for all the OCM tree view items.

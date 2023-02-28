@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 import * as path from 'path';
 import { DataProvider } from './dataProvider';
 import { TreeNode } from '../nodes/treeNode';
