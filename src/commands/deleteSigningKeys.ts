@@ -1,7 +1,4 @@
-import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { workspace } from 'vscode';
-import YAML from 'yaml';
 import util from 'util';
 import { KeyEntry, OCMConfigTypes } from '../ocm/configTypes';
 import { resolveTilde } from '../utils/pathUtils';

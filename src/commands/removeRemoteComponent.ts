@@ -1,4 +1,4 @@
-import { ExtensionContext, window, Uri, workspace } from 'vscode';
+import { ExtensionContext, window } from 'vscode';
 import { getExtensionContext } from '../extensionContext';
 import { GlobalState, GlobalStateKey } from '../globalState';
 import { ComponentNode } from '../views/nodes/componentNode';

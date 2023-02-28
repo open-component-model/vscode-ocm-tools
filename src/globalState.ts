@@ -8,11 +8,14 @@ export const enum GlobalStateKey {
 	Components = 'components',
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	FirstEverActivationStorageKey = 'firstEverActivation',
+	// eslint-disable-next-line @typescript-eslint/naming-convention
+	OCMPath = 'ocm-path',
 }
 
 interface GlobalStateKeyMapping {
 	[GlobalStateKey.Components]: string[];
 	[GlobalStateKey.FirstEverActivationStorageKey]: boolean;
+	[GlobalStateKey.OCMPath]: string;
 }
 
 export class GlobalState {

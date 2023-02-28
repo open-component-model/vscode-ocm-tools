@@ -1,4 +1,4 @@
-import { exec } from '../exec';
+import { shell } from '../shell';
 import { window, workspace } from 'vscode';
 import { getComponentURI } from '../views/componentDescriptorToNode';
 import { ComponentVersionNode } from '../views/nodes/componentVersionNode';
@@ -11,6 +11,6 @@ export async function transferComponentByValue(node: ComponentVersionNode | Comp
     if (!target) { return; }
     const cmd = `ocm transfer component -f -V ${component} ${target}`;
     window.showInformationMessage(`Transferring component: ${component} to ${target}...`);
-    const res = await exec(cmd, { silent: false });
+    const res = await shell.exec(cmd);
     window.showInformationMessage(`Transfer complete: ${res.stdout}`);
 }

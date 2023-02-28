@@ -1,10 +1,11 @@
-import { exec } from '../exec';
+import { shell } from '../shell';
 import { window, workspace } from 'vscode';
 import { getComponentURI } from '../views/componentDescriptorToNode';
 import { ComponentVersionNode } from '../views/nodes/componentVersionNode';
 import { getConfigFile } from '../ocm/getConfigFile';
 import { OCMConfigTypes, KeyEntry } from '../ocm/configTypes';
 import { ComponentNode } from '../views/nodes/componentNode';
+import { output } from '../output';
 
 export async function signComponent(node: ComponentVersionNode | ComponentNode) {
     if (!workspace.workspaceFolders) { return; }
@@ -18,10 +19,13 @@ export async function signComponent(node: ComponentVersionNode | ComponentNode) 
             }
         }
     });
+    
     let result = await window.showQuickPick(keys, { title: "Select a signing key..."});
     if (!result) { return; }
+
     const cmd = `ocm component sign --signature ${result} ${component}`;
-    window.showInformationMessage(`Signing component: ${component}`);
-    const res = await exec(cmd, { silent: false });
-    window.showInformationMessage(`Signing result: ${res.stdout}`);
+    output.send(`Signing component: ${component}`);
+    
+    const res = await shell.exec(cmd);
+    output.send(`Signing result: ${res.stdout}`);
 }

@@ -34,10 +34,20 @@ export function createTreeViews(context: ExtensionContext) {
 	});
 }
 
+export function refreshAllTreeViews() {
+	refreshWorkspaceTreeView();
+	refreshRemoteTreeView();
+	refreshKeyTreeView();
+}
+
 export function refreshWorkspaceTreeView(node?: TreeNode) {
 	workspaceTreeViewProvider.refresh(node);
 }
 
 export function refreshRemoteTreeView(node?: TreeNode) {
 	remoteTreeViewProvider.refresh(node);
+}
+
+export function refreshKeyTreeView(node?: TreeNode) {
+	keyTreeViewProvider.refresh(node);
 }

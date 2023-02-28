@@ -3,7 +3,7 @@ import { TreeNode } from '../nodes/treeNode';
 import { componentDescriptorParser, getComponentDescriptorMeta, ComponentMeta } from '../componentDescriptorToNode';
 import { GlobalState, GlobalStateKey } from '../../globalState';
 import { ComponentNode } from '../nodes/componentNode';
-import { ThemeIcon } from 'vscode';
+import { ThemeIcon, window } from 'vscode';
 import { fetchComponents } from '../../commands/fetchComponents';
 
 export class RemoteDataProvider extends DataProvider {

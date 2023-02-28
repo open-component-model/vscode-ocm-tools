@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { workspace } from 'vscode';
 import YAML from 'yaml';
-import { exec } from '../exec';
+import { exec } from '../shell';
 import { getExtensionContext } from '../extensionContext';
 import { OCMConfigTypes } from '../ocm/configTypes';
 import { resolveTilde } from '../utils/pathUtils';
