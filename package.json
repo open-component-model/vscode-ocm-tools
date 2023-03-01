@@ -8,6 +8,7 @@
   "contributors": [
       "Piaras Hoban <piaras@weave.works>"
   ],
+  "icon": "resurces/images/logo.png",
   "engines": {
     "vscode": "^1.74.0",
     "node": ">=7.0.0"
@@ -96,7 +97,7 @@
       {
         "command": "ocm.guides.newUser",
         "title": "New User Guide",
-        "category": "Open Component Model"  
+        "category": "Open Component Model"
       }
     ],
     "viewsContainers": {
