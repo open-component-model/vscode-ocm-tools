@@ -6,7 +6,8 @@ import { succeeded } from './errorable';
 import { setExtensionContext } from './extensionContext';
 import { promptToInstallOCM } from './install';
 import { createTreeViews, refreshAllTreeViews } from './views/treeViews';
-import { GlobalState } from './globalState';
+import { GlobalState,GlobalStateKey } from './globalState';
+import { showNewUserGuide } from './commands/showNewUserGuide';
 
 export let globalState: GlobalState;
 
@@ -18,6 +19,11 @@ export async function activate(context: ExtensionContext) {
 
 	globalState = new GlobalState(context);
 
+	if (globalState.get(GlobalStateKey.FirstEverActivationStorageKey) === undefined) {
+		showNewUserGuide();
+		globalState.set(GlobalStateKey.FirstEverActivationStorageKey, false);
+	}
+	
 	createTreeViews(context);
 	createDocumentProvider(context);
 	registerCommands();

@@ -92,6 +92,11 @@
         "command": "ocm.keys.delete",
         "title": "Delete",
         "category": "Open Component Model"
+      },
+      {
+        "command": "ocm.guides.newUser",
+        "title": "New User Guide",
+        "category": "Open Component Model"  
       }
     ],
     "viewsContainers": {
