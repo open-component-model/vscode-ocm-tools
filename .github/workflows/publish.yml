@@ -32,6 +32,9 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Check for correct branch (Edge)
         if: github.event.inputs.releaseChannel == 'edge'
