@@ -2,12 +2,13 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { workspace } from 'vscode';
 import YAML from 'yaml';
-import { exec } from '../shell';
+import { shell } from '../shell';
 import { getExtensionContext } from '../extensionContext';
 import { OCMConfigTypes } from '../ocm/configTypes';
 import { resolveTilde } from '../utils/pathUtils';
 import { keyTreeViewProvider } from '../views/treeViews';
 import { CreateSigningKeysPanel } from '../webviews/createSigningKeys';
+import { output } from '../output';
 
 export async function createSigningKeysView() {
 	CreateSigningKeysPanel.createOrShow(getExtensionContext());
@@ -24,7 +25,8 @@ export async function createSigningKeys(path: string, name: string): Promise<voi
 
 	const cmd = `ocm create rsakeypair ${privateKey} ${publicKey}`;
 
-	const res = await exec(cmd, { silent: true });
+	const res = await shell.exec(cmd);
+    output.send(`Generating keypair: ${res.stdout}`)
 
 	const configPath: string | undefined = workspace.getConfiguration("openComponentModel").get("configurationFile");
 	if (!configPath) { return;}
@@ -42,7 +44,7 @@ export async function createSigningKeys(path: string, name: string): Promise<voi
 			[name]: {
 				"path": publicKey
 			}
-		},		
+		},
 	};
 
 	configFile.configurations.push(keyElement);
@@ -50,11 +52,4 @@ export async function createSigningKeys(path: string, name: string): Promise<voi
 	writeFileSync(resolveTilde(configPath), YAML.stringify(configFile));
 
 	keyTreeViewProvider.refresh();
-	// add key view nodes and data provider
-
-	// enable adding existing keys and updating the config
-
-	// try to verify components using any available keys for the provider
-
-	// when signing components let the user choose the signing key from 
 }
