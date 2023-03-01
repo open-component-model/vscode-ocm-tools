@@ -8,7 +8,7 @@
   "contributors": [
       "Piaras Hoban <piaras@weave.works>"
   ],
-  "icon": "resurces/images/logo.png",
+  "icon": "resources/images/logo.png",
   "engines": {
     "vscode": "^1.74.0",
     "node": ">=7.0.0"
