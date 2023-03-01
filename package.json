@@ -3,7 +3,11 @@
   "displayName": "Open Component Model tools",
   "description": "Open Component Model tools for visual studio code",
   "version": "0.0.1",
-  "publisher": "open component model",
+  "publisher": "open-component-model",
+  "author": "Piaras Hoban <piaras@weave.works>",
+  "contributors": [
+      "Piaras Hoban <piaras@weave.works>"
+  ],
   "engines": {
     "vscode": "^1.74.0",
     "node": ">=7.0.0"
@@ -11,13 +15,19 @@
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "gitops",
+    "devops",
+    "sbom",
+    "software delivery",
+    "oci",
+    "packaging"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/open-component-model/vscode-ocm-tools"
   },
-  "activationEvents": [
-    "onCommand:ocm.helloWorld"
-  ],
+  "activationEvents": [ ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
@@ -82,6 +92,11 @@
         "command": "ocm.keys.delete",
         "title": "Delete",
         "category": "Open Component Model"
+      },
+      {
+        "command": "ocm.guides.newUser",
+        "title": "New User Guide",
+        "category": "Open Component Model"  
       }
     ],
     "viewsContainers": {
@@ -89,7 +104,7 @@
         {
           "id": "ocm",
           "title": "Open Component Model",
-          "icon": "resources/icons/ocm.svg"
+          "icon": "resources/icons/ocm.png"
         }
       ]
     },

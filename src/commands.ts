@@ -11,6 +11,7 @@ import { signComponent } from "./commands/signComponent";
 import { transferComponent } from "./commands/transferComponent";
 import { verifyComponent } from "./commands/verifyComponent";
 import { transferComponentByValue } from "./commands/transferComponentByValue";
+import { showNewUserGuide } from "./commands/showNewUserGuide";
 
 export enum CommandIDs {
 	componentVersionOpen = "ocm.component-version.open",
@@ -31,6 +32,8 @@ export enum CommandIDs {
 	sigingKeysCreate = "ocm.keys.create",
 	signingsKeysCreateView = "ocm.keys.createView",
 	signingKeysDelete = "ocm.keys.delete",
+
+	newUserGuide = "ocm.guides.newUser"
 }
 
 export function registerCommands() {
@@ -54,4 +57,6 @@ export function registerCommands() {
 	commands.registerCommand(CommandIDs.sigingKeysCreate, createSigningKeys);
 	commands.registerCommand(CommandIDs.signingsKeysCreateView, createSigningKeysView);
 	commands.registerCommand(CommandIDs.signingKeysDelete, deleteSigningKeys);
+
+	commands.registerCommand(CommandIDs.newUserGuide, showNewUserGuide);
 }
