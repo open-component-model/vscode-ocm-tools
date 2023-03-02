@@ -222,8 +222,8 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
-    "gen:types:ocm": "tsc ./src/ocm/generateTypes.ts && node ./src/ocm/generateTypes.js && npm run clean:types:ocm",
-    "clean:types:ocm": "rm ./src/ocm/generateTypes.js"
+    "gen:types:ocm": "tsc ./scripts/generateTypes.ts && node ./scripts/generateTypes.js && npm run clean:types:ocm",
+    "clean:types:ocm": "rm ./scripts/generateTypes.js*"
   },
   "devDependencies": {
     "@types/glob": "^8.0.1",
