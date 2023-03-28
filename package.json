@@ -33,6 +33,11 @@
   "contributes": {
     "commands": [
       {
+        "command": "ocm.component-version.createView",
+        "title": "Create Component",
+        "icon": "$(add)"
+      },
+      {
         "command": "ocm.remote.add",
         "title": "Add Component",
         "icon": "$(add)"
@@ -149,6 +154,11 @@
         {
           "command": "ocm.remote.refresh",
           "when": "view == ocm.views.remote",
+          "group": "navigation"
+        },
+        {
+          "command": "ocm.component-version.createView",
+          "when": "view == ocm.views.workspace",
           "group": "navigation"
         },
         {
