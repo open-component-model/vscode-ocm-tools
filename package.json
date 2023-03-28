@@ -127,6 +127,10 @@
     },
     "viewsWelcome": [
       {
+        "view": "ocm.views.workspace",
+        "contents": "No local components found.\n[Create Component](command:ocm.component-version.createView)"
+      },
+      {
         "view": "ocm.views.remote",
         "contents": "No remote components found.\n[Add Component](command:ocm.remote.add)"
       },
