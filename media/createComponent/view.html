@@ -1,0 +1,22 @@
+<h2>Create Component</h2>
+<hr>
+
+<div id="generic-form">
+	<div>
+		<label class="header-label" for="componentName">Component Name</label><input type="text" id="componentName" placeholder="<namespace>/<name> - e.g. ocm.software/podinfo">
+	</div>
+	<div>
+		<label class="header-label" for="version">Version</label><input type="text" id="version" placeholder="SemVer - e.g. 1.0.1">
+	</div>
+	<div>
+		<label class="header-label" for="provider">Provider</label><input type="text" id="provider" placeholder="Component provider - e.g. ocm.software">
+	</div>
+	<div>
+		<label class="header-label" for="scheme">Scheme</label><select name="scheme" id="scheme">
+			<option value="v3alpha1">v3alpha1</option>
+			<option value="v2">v2</option>
+		</select>
+	</div>
+</div>
+
+<button type="button" id="create-component" class="submit-button">Create</button>
