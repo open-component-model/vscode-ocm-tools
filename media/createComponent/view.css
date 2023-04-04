@@ -34,6 +34,17 @@ input[type="checkbox"] + label {
 	vertical-align: middle;
 	display: inline-block;
 }
+select {
+	padding: 6px;
+	border: 1px solid var(--vscode-input-border);
+	background-color: var(--vscode-input-background);
+	color: var(--vscode-input-foreground);
+}
+
+span {
+	display: block;
+	overflow: hidden;
+}
 
 .app {
 	max-width: max(50%, 800px);
@@ -43,7 +54,7 @@ input[type="checkbox"] + label {
 
 .header-label {
 	display: block;
-	margin-bottom: 0.2em;
+	margin-bottom: 0.4em;
 	margin-top: 0.6em;
 }
 
@@ -54,6 +65,23 @@ input[type="checkbox"] + label {
 	text-overflow: ellipsis;
 	margin: 10px 0;
 	float: right;
+}
+
+.generic-button {
+	width: fit-content;
+	padding: 6px 12px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin: 10px 0;
+	display: block;
+}
+
+.filepicker-button {
+	width: fit-content;
+	padding: 6px 12px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	float: left;
 }
 
 .cli-argument {

@@ -2,12 +2,14 @@ import { readFileSync } from "fs";
 import {
   Disposable,
   ExtensionContext,
+  OpenDialogOptions,
   Uri,
   ViewColumn,
   Webview,
   WebviewPanel,
   window,
 } from "vscode";
+import { addResource } from "../commands/addResources";
 import { createComponent } from "../commands/createComponent";
 import { asAbsolutePath } from "../extensionContext";
 import { GlobalState } from "../globalState";
@@ -21,14 +23,49 @@ interface CreateComponentWebviewContent {
   value: {};
 }
 
-export interface CreateComponent {
-  type: "createComponent";
+interface OpenDialogResponse {
+  type: "openDialogResponse";
   value: {
-    componentName: string;
-    version: string;
-    provider: string;
-    scheme: string;
+    fileUri: string;
+    forResourceId: number;
   };
+}
+
+export interface FileResource {
+  inputType: "file";
+  name: string;
+  type: string;
+  mediaType: string;
+  path: string;
+  compress: boolean;
+}
+
+export interface DirectoryResource {
+  inputType: "directory";
+  name: string;
+  type: string;
+  path: string;
+  compress: boolean;
+}
+
+export interface OciImageResource {
+  inputType: "ociImage";
+  name: string;
+  version: string;
+  imageReference: string;
+}
+
+export interface CreateComponent {
+  componentName: string;
+  version: string;
+  provider: string;
+  scheme: string;
+  resources?: Array<FileResource | DirectoryResource | OciImageResource>;
+}
+
+export interface CreateComponentMessage {
+  type: "createComponent";
+  value: CreateComponent;
 }
 
 export interface ShowNotification {
@@ -39,16 +76,28 @@ export interface ShowNotification {
   };
 }
 
+export interface ShowOpenDialog {
+  type: "showOpenDialog";
+  value: {
+    options: OpenDialogOptions;
+    forResourceId: number;
+  };
+}
+
 export interface WebviewLoaded {
   type: "webviewLoaded";
   value: true;
 }
 
 /** Message sent from Extension to Webview */
-export type MessageToWebview = CreateComponentWebviewContent;
+export type MessageToWebview = CreateComponentWebviewContent | OpenDialogResponse;
 
 /** Message sent from Webview to Extension */
-export type MessageFromWebview = CreateComponent | ShowNotification | WebviewLoaded;
+export type MessageFromWebview =
+  | CreateComponentMessage
+  | ShowNotification
+  | ShowOpenDialog
+  | WebviewLoaded;
 
 /**
  * Manages create source webview panel.
@@ -107,17 +156,26 @@ export class CreateComponentPanel {
         switch (message.type) {
           case "createComponent":
             const msg = `Creating component ${message.value.componentName}:${message.value.version}`;
-
             window.showInformationMessage(msg, { modal: false });
 
-            await createComponent(
-              message.value.componentName,
-              message.value.version,
-              message.value.provider,
-              message.value.scheme
-            );
+            const res = await createComponent(message.value);
+            res.success
+              ? window.showInformationMessage(res.message)
+              : window.showErrorMessage(res.message);
 
             this.dispose();
+            break;
+          case "showOpenDialog":
+            const fileUri = await window.showOpenDialog(message.value.options);
+            if (fileUri && fileUri[0]) {
+              this._postMessage({
+                type: "openDialogResponse",
+                value: {
+                  fileUri: fileUri[0].fsPath,
+                  forResourceId: message.value.forResourceId,
+                },
+              });
+            }
             break;
           case "showNotification":
             window.showInformationMessage(message.value.text, { modal: message.value.isModal });
@@ -178,7 +236,7 @@ export class CreateComponentPanel {
     const stylesPathMainPath = Uri.joinPath(
       this._extensionUri,
       "media",
-      "createSigningKeys",
+      "createComponent",
       "view.css"
     );
 
