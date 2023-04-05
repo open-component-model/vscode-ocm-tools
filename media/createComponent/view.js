@@ -165,14 +165,18 @@ $submitBtn.addEventListener("click", () => {
         continue;
       }
 
-      component.value["sources"].push({
-        name: getInputValue(`sourceName-${i}`),
-        version: getInputValue(`sourceVersion-${i}`),
-        // @ts-ignore
-        accessType: getInputValue(`sourceAccessType-${i}`),
-        repoUrl: getInputValue(`sourceRepoUrl-${i}`),
-        commit: getInputValue(`sourceCommit-${i}`),
-      });
+      switch (getInputValue(`sourceAccessType-${i}`)) {
+        case "gihHub": {
+          component.value["sources"].push({
+            name: getInputValue(`sourceName-${i}`),
+            version: getInputValue(`sourceVersion-${i}`),
+            // @ts-ignore
+            accessType: getInputValue(`sourceAccessType-${i}`),
+            repoUrl: getInputValue(`sourceRepoUrl-${i}`),
+            commit: getInputValue(`sourceCommit-${i}`),
+          });
+        }
+      }
     }
   }
 
@@ -315,9 +319,30 @@ function addSourceForm(i) {
   <h3>Add Source</h3>
   <div>
     <label class="header-label" for="sourceAccessType-${i}">Source Type</label><select name="sourceAccessType-${i}" id="sourceAccessType-${i}">
+      <option disabled selected value> -- select an option -- </option>
       <option value="gitHub">GitHub</option>
 		</select>
   </div>
+  `;
+
+  $addSourceButton.insertAdjacentElement("beforebegin", div);
+  document.getElementById(`sourceAccessType-${i}`)?.addEventListener("change", (e) => {
+    const sourceType = /** @type HTMLSelectElement */ (e.target).value;
+    switch (sourceType) {
+      case "gitHub": {
+        addGitHubSourceForm(i);
+        break;
+      }
+    }
+  });
+}
+
+/**
+ *
+ * @param {number} i
+ */
+function addGitHubSourceForm(i) {
+  const html = `
   <div>
     <label class="header-label" for="sourceName-${i}">Source Name</label><input type="text" name="sourceName-${i}" id="sourceName-${i}" />
   </div>
@@ -332,7 +357,7 @@ function addSourceForm(i) {
   </div>
   `;
 
-  $addSourceButton.insertAdjacentElement("beforebegin", div);
+  document.getElementById(`source-form-${i}`)?.insertAdjacentHTML("beforeend", html);
 }
 
 /**
