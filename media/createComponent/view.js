@@ -62,6 +62,30 @@ $addResourceButton.addEventListener("click", () => {
 });
 
 $submitBtn.addEventListener("click", () => {
+  const inputs = /** @type NodeListOf<HTMLInputElement> */ (
+    document.querySelectorAll("#generic-form input[type=text]")
+  );
+  if (inputs.length !== 0) {
+    let invalidFields = 0;
+    inputs.forEach((input) => {
+      if (!input.value.trim()) {
+        invalidFields++;
+        if (input.classList.contains("invalid")) {
+          return;
+        }
+        input.classList.add("invalid");
+        input.insertAdjacentHTML(
+          "afterend",
+          `<span class="validation-error">This field is required.</span>`
+        );
+        updateInvalidField(input);
+      }
+    });
+    if (invalidFields > 0) {
+      return;
+    }
+  }
+
   /** @type {import('../../src/webviews/createComponent').CreateComponentMessage} */
   const component = {
     type: "createComponent",
@@ -244,6 +268,19 @@ function addOciImageResourceForm(i) {
   `;
 
   document.getElementById(`resource-form-${i}`)?.insertAdjacentHTML("beforeend", html);
+}
+
+/**
+ *
+ * @param {Element} field
+ */
+function updateInvalidField(field) {
+  field?.addEventListener("input", (e) => {
+    if (field?.classList.contains("invalid")) {
+      field.classList.remove("invalid");
+      field.nextElementSibling?.remove();
+    }
+  });
 }
 
 /**
