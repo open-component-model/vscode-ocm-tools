@@ -2,23 +2,9 @@
 
 const vscode = acquireVsCodeApi();
 
-// /**
-//  * @type {{
-//  * componentName: string;
-//  * version: string;
-//  * provider: string;
-//  * scheme: string;
-//  * resources: [];
-//  * }}
-//  */
-// const webviewTempState = {
-//   componentName: "",
-//   version: "",
-//   provider: "",
-//   scheme: "",
-// };
-
 let resourceCount = 0;
+let referenceCount = 0;
+let sourceCount = 0;
 
 // Generic component input ids
 const componentName = "componentName";
@@ -27,6 +13,10 @@ const provider = "provider";
 const scheme = "scheme";
 
 const $addResourceButton = /** @type HTMLButtonElement */ (document.getElementById("add-resource"));
+const $addReferenceButton = /** @type HTMLButtonElement */ (
+  document.getElementById("add-reference")
+);
+const $addSourceButton = /** @type HTMLButtonElement */ (document.getElementById("add-source"));
 const $submitBtn = /** @type HTMLButtonElement */ (document.getElementById("create-component"));
 
 $addResourceButton.addEventListener("click", () => {
@@ -59,6 +49,16 @@ $addResourceButton.addEventListener("click", () => {
   });
 
   resourceCount++;
+});
+
+$addSourceButton.addEventListener("click", () => {
+  addSourceForm(sourceCount);
+  sourceCount++;
+});
+
+$addReferenceButton.addEventListener("click", () => {
+  addReferenceForm(referenceCount);
+  referenceCount++;
 });
 
 $submitBtn.addEventListener("click", () => {
@@ -95,7 +95,6 @@ $submitBtn.addEventListener("click", () => {
       version: getInputValue(version),
       provider: getInputValue(provider),
       scheme: getInputValue(scheme),
-      resources: [],
     },
   };
 
@@ -103,7 +102,6 @@ $submitBtn.addEventListener("click", () => {
     component.value["resources"] = [];
     for (let i = 0; i < resourceCount; i++) {
       if (!document.getElementById(`resource-form-${i}`)) {
-        console.log("not found");
         continue;
       }
 
@@ -145,7 +143,39 @@ $submitBtn.addEventListener("click", () => {
     }
   }
 
-  console.log("component", component);
+  if (referenceCount > 0) {
+    component.value["references"] = [];
+    for (let i = 0; i < referenceCount; i++) {
+      if (!document.getElementById(`reference-form-${i}`)) {
+        continue;
+      }
+
+      component.value["references"].push({
+        name: getInputValue(`referenceName-${i}`),
+        componentName: getInputValue(`referenceComponentName-${i}`),
+        componentVersion: getInputValue(`referenceComponentVersion-${i}`),
+      });
+    }
+  }
+
+  if (sourceCount > 0) {
+    component.value["sources"] = [];
+    for (let i = 0; i < sourceCount; i++) {
+      if (!document.getElementById(`source-form-${i}`)) {
+        continue;
+      }
+
+      component.value["sources"].push({
+        name: getInputValue(`sourceName-${i}`),
+        version: getInputValue(`sourceVersion-${i}`),
+        // @ts-ignore
+        accessType: getInputValue(`sourceAccessType-${i}`),
+        repoUrl: getInputValue(`sourceRepoUrl-${i}`),
+        commit: getInputValue(`sourceCommit-${i}`),
+      });
+    }
+  }
+
   postVSCodeMessage(component);
 });
 
@@ -157,7 +187,9 @@ function addResourceForm(i) {
   var div = document.createElement("div");
   div.setAttribute("id", `resource-form-${i}`);
   div.setAttribute("data-resource-counter", `${i}`);
+  div.classList.add("addon-form");
   div.innerHTML = `
+  <h3>Add Resource</h3>
   <div>
     <label class="header-label" for="resourceInputType-${i}">Resource Input Type</label><select name="resourceInputType-${i}" id="resourceInputType-${i}">
       <option disabled selected value> -- select an option -- </option>
@@ -268,6 +300,64 @@ function addOciImageResourceForm(i) {
   `;
 
   document.getElementById(`resource-form-${i}`)?.insertAdjacentHTML("beforeend", html);
+}
+
+/**
+ *
+ * @param {number} i
+ */
+function addSourceForm(i) {
+  var div = document.createElement("div");
+  div.setAttribute("id", `source-form-${i}`);
+  div.setAttribute("data-source-counter", `${i}`);
+  div.classList.add("addon-form");
+  div.innerHTML = `
+  <h3>Add Source</h3>
+  <div>
+    <label class="header-label" for="sourceAccessType-${i}">Source Type</label><select name="sourceAccessType-${i}" id="sourceAccessType-${i}">
+      <option value="gitHub">GitHub</option>
+		</select>
+  </div>
+  <div>
+    <label class="header-label" for="sourceName-${i}">Source Name</label><input type="text" name="sourceName-${i}" id="sourceName-${i}" />
+  </div>
+  <div>
+    <label class="header-label" for="sourceVersion-${i}">Source Version</label><input type="text" name="sourceVersion-${i}" id="sourceVersion-${i}" />
+  </div>
+  <div>
+    <label class="header-label" for="sourceRepoUrl-${i}">Repo URL</label><input type="text" name="sourceRepoUrl-${i}" id="sourceRepoUrl-${i}" />
+  </div>
+  <div>
+    <label class="header-label" for="sourceCommit-${i}">Commit</label><input type="text" name="sourceCommit-${i}" id="sourceCommit-${i}" />
+  </div>
+  `;
+
+  $addSourceButton.insertAdjacentElement("beforebegin", div);
+}
+
+/**
+ *
+ * @param {number} i
+ */
+function addReferenceForm(i) {
+  var div = document.createElement("div");
+  div.setAttribute("id", `reference-form-${i}`);
+  div.setAttribute("data-reference-counter", `${i}`);
+  div.classList.add("addon-form");
+  div.innerHTML = `
+  <h3>Add Reference</h3>
+  <div>
+    <label class="header-label" for="referenceName-${i}">Reference Name</label><input type="text" name="referenceName-${i}" id="referenceName-${i}" />
+  </div>
+  <div>
+    <label class="header-label" for="referenceComponentName-${i}">Component Name</label><input type="text" name="referenceComponentName-${i}" id="referenceComponentName-${i}" />
+  </div>
+  <div>
+    <label class="header-label" for="referenceComponentVersion-${i}">Component Version</label><input type="text" name="referenceComponentVersion-${i}" id="referenceComponentVersion-${i}" />
+  </div>
+  `;
+
+  $addReferenceButton.insertAdjacentElement("beforebegin", div);
 }
 
 /**

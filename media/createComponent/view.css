@@ -67,6 +67,10 @@ span {
 	float: right;
 }
 
+.submit-button:disabled, .submit-button:hover:disabled {
+	background-color: var(--vscode-disabledForeground);
+}
+
 .generic-button {
 	width: fit-content;
 	padding: 6px 12px;
@@ -94,4 +98,20 @@ span {
 .vscode-light .cli-argument {
 	background-color: rgba(0, 0, 0, 0.02);
 	border-color: rgba(0, 0, 0, 0.15);
+}
+
+.addon-form {
+	border: 1px solid var(--vscode-focusBorder);
+	padding: 0.8em;
+	margin: 1em 0;
+}
+
+.invalid {
+	border-color: rgb(238, 62, 62) !important;
+}
+
+.validation-error {
+	color: rgb(238, 62, 62);
+	font-size: 12px;
+	margin-top: 1px;
 }

@@ -9,7 +9,6 @@ import {
   WebviewPanel,
   window,
 } from "vscode";
-import { addResource } from "../commands/addResources";
 import { createComponent } from "../commands/createComponent";
 import { asAbsolutePath } from "../extensionContext";
 import { GlobalState } from "../globalState";
@@ -55,12 +54,28 @@ export interface OciImageResource {
   imageReference: string;
 }
 
+export interface GitHubSource {
+  name: string;
+  version: string;
+  accessType: "gitHub";
+  repoUrl: string;
+  commit: string;
+}
+
+export interface Reference {
+  name: string;
+  componentName: string;
+  componentVersion: string;
+}
+
 export interface CreateComponent {
   componentName: string;
   version: string;
   provider: string;
   scheme: string;
   resources?: Array<FileResource | DirectoryResource | OciImageResource>;
+  references?: Array<Reference>;
+  sources?: Array<GitHubSource>;
 }
 
 export interface CreateComponentMessage {

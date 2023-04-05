@@ -1,11 +1,13 @@
-import { shell } from "../shell";
-import { output } from "../output";
-import { addResource, AddResourceResult } from "./addResources";
-import { getExtensionContext } from "../extensionContext";
-import { CreateComponent, CreateComponentPanel } from "../webviews/createComponent";
-import { workspaceTreeViewProvider } from "../views/treeViews";
-import { window, workspace } from "vscode";
 import { existsSync, rmSync } from "fs";
+import { window, workspace } from "vscode";
+import { getExtensionContext } from "../extensionContext";
+import { output } from "../output";
+import { shell } from "../shell";
+import { workspaceTreeViewProvider } from "../views/treeViews";
+import { CreateComponent, CreateComponentPanel } from "../webviews/createComponent";
+import { addReference, AddReferenceResult } from "./addReference";
+import { addResource, AddResourceResult } from "./addResources";
+import { addSource, AddSourceResult } from "./addSource";
 
 export async function createComponentView() {
   CreateComponentPanel.createOrShow(getExtensionContext());
@@ -58,10 +60,39 @@ export async function createComponent(component: CreateComponent): Promise<Creat
     for (const resource of component.resources) {
       const res: AddResourceResult = await addResource(resource);
       if (!res.success) {
+        // return early if a resource could not be added.
         workspaceTreeViewProvider.refresh();
         return {
           success: false,
-          message: `Component creation failed: ${res.message}`,
+          message: `Component creation failed adding resource: ${res.message}`,
+        };
+      }
+    }
+  }
+
+  if (component.references && component.references.length > 0) {
+    for (const reference of component.references) {
+      const res: AddReferenceResult = await addReference(reference);
+      if (!res.success) {
+        // return early if a reference could not be added.
+        workspaceTreeViewProvider.refresh();
+        return {
+          success: false,
+          message: `Component creation failed adding reference: ${res.message}`,
+        };
+      }
+    }
+  }
+
+  if (component.sources && component.sources.length > 0) {
+    for (const source of component.sources) {
+      const res: AddSourceResult = await addSource(source);
+      if (!res.success) {
+        // return early if a source could not be added.
+        workspaceTreeViewProvider.refresh();
+        return {
+          success: false,
+          message: `Component creation failed adding source: ${res.message}`,
         };
       }
     }
