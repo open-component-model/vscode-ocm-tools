@@ -77,12 +77,6 @@
         "title": "Transfer (copy resources)"
       },
       {
-        "command": "ocm.workspace.refresh",
-        "title": "Refresh",
-        "category": "Open Component Model",
-        "icon": "$(refresh)"
-      },
-      {
         "command": "ocm.remote.refresh",
         "title": "Refresh",
         "category": "Open Component Model",
@@ -147,16 +141,6 @@
     "menus": {
       "view/title": [
         {
-          "command": "ocm.remote.add",
-          "when": "view == ocm.views.remote",
-          "group": "navigation"
-        },
-        {
-          "command": "ocm.remote.refresh",
-          "when": "view == ocm.views.remote",
-          "group": "navigation"
-        },
-        {
           "command": "ocm.component-version.createView",
           "when": "view == ocm.views.workspace",
           "group": "navigation"
@@ -164,6 +148,16 @@
         {
           "command": "ocm.workspace.refresh",
           "when": "view == ocm.views.workspace",
+          "group": "navigation"
+        },
+        {
+          "command": "ocm.remote.add",
+          "when": "view == ocm.views.remote",
+          "group": "navigation"
+        },
+        {
+          "command": "ocm.remote.refresh",
+          "when": "view == ocm.views.remote",
           "group": "navigation"
         },
         {

@@ -166,7 +166,7 @@ $submitBtn.addEventListener("click", () => {
       }
 
       switch (getInputValue(`sourceAccessType-${i}`)) {
-        case "gihHub": {
+        case "gitHub": {
           component.value["sources"].push({
             name: getInputValue(`sourceName-${i}`),
             version: getInputValue(`sourceVersion-${i}`),
