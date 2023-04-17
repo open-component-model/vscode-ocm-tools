@@ -34,6 +34,17 @@ input[type="checkbox"] + label {
 	vertical-align: middle;
 	display: inline-block;
 }
+select {
+	padding: 6px;
+	border: 1px solid var(--vscode-input-border);
+	background-color: var(--vscode-input-background);
+	color: var(--vscode-input-foreground);
+}
+
+span {
+	display: block;
+	overflow: hidden;
+}
 
 .app {
 	max-width: max(50%, 800px);
@@ -43,7 +54,7 @@ input[type="checkbox"] + label {
 
 .header-label {
 	display: block;
-	margin-bottom: 0.2em;
+	margin-bottom: 0.4em;
 	margin-top: 0.6em;
 }
 
@@ -56,6 +67,27 @@ input[type="checkbox"] + label {
 	float: right;
 }
 
+.submit-button:disabled, .submit-button:hover:disabled {
+	background-color: var(--vscode-disabledForeground);
+}
+
+.generic-button {
+	width: fit-content;
+	padding: 6px 12px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin: 10px 0;
+	display: block;
+}
+
+.filepicker-button {
+	width: fit-content;
+	padding: 6px 12px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	float: left;
+}
+
 .cli-argument {
 	background-color: rgba(255, 255, 255, 0.05);
 	border: 1px solid rgba(255, 255, 255, 0.15);
@@ -66,4 +98,20 @@ input[type="checkbox"] + label {
 .vscode-light .cli-argument {
 	background-color: rgba(0, 0, 0, 0.02);
 	border-color: rgba(0, 0, 0, 0.15);
+}
+
+.addon-form {
+	border: 1px solid var(--vscode-focusBorder);
+	padding: 0.8em;
+	margin: 1em 0;
+}
+
+.invalid {
+	border-color: rgb(238, 62, 62) !important;
+}
+
+.validation-error {
+	color: rgb(238, 62, 62);
+	font-size: 12px;
+	margin-top: 1px;
 }
