@@ -8,6 +8,7 @@ let sourceCount = 0;
 
 // Generic component input ids
 const componentName = "componentName";
+const path = "path";
 const version = "version";
 const provider = "provider";
 const scheme = "scheme";
@@ -37,7 +38,7 @@ $addResourceButton.addEventListener("click", () => {
         addFileResourceForm(resourceNumber);
         break;
       }
-      case "directory": {
+      case "dir": {
         addDirectoryResourceForm(resourceNumber);
         break;
       }
@@ -90,10 +91,11 @@ $submitBtn.addEventListener("click", () => {
   const component = {
     type: "createComponent",
     value: {
-      // @ts-ignore
-      componentName: getInputValue(componentName),
+      name: getInputValue(componentName),
+      path: getInputValue(path),
       version: getInputValue(version),
-      provider: getInputValue(provider),
+      provider: { name: getInputValue(provider) },
+      // @ts-ignore
       scheme: getInputValue(scheme),
     },
   };
@@ -108,35 +110,39 @@ $submitBtn.addEventListener("click", () => {
       switch (getInputValue(`resourceInputType-${i}`)) {
         case "file": {
           component.value["resources"].push({
-            // @ts-ignore
-            inputType: getInputValue(`resourceInputType-${i}`),
             name: getInputValue(`resourceName-${i}`),
             type: getInputValue(`resourceType-${i}`),
-            mediaType: getInputValue(`resourceMediaType-${i}`),
-            path: getInputValue(`resourcePath-${i}`),
-            // @ts-ignore
-            compress: getInputValue(`compressResource-${i}`),
+            relation: "local",
+            input: {
+              type: "file",
+              mediaType: getInputValue(`resourceMediaType-${i}`),
+              path: getInputValue(`resourcePath-${i}`),
+              compress: getInputValueCheckbox(`compressResource-${i}`),
+            },
           });
           break;
         }
-        case "directory": {
+        case "dir": {
           component.value["resources"].push({
-            // @ts-ignore
-            inputType: getInputValue(`resourceInputType-${i}`),
             name: getInputValue(`resourceName-${i}`),
-            path: getInputValue(`resourcePath-${i}`),
-            // @ts-ignore
-            compress: getInputValue(`compressResource-${i}`),
+            relation: "local",
+            input: {
+              type: "dir",
+              path: getInputValue(`resourcePath-${i}`),
+              compress: getInputValueCheckbox(`compressResource-${i}`),
+            },
           });
           break;
         }
         case "ociImage": {
           component.value["resources"].push({
-            // @ts-ignore
-            inputType: getInputValue(`resourceInputType-${i}`),
             name: getInputValue(`resourceName-${i}`),
             version: getInputValue(`resourceVersion-${i}`),
-            imageReference: getInputValue(`resourceImageReference-${i}`),
+            type: getInputValue(`resourceInputType-${i}`),
+            access: {
+              type: "ociArtifact",
+              imageReference: getInputValue(`resourceImageReference-${i}`),
+            },
           });
         }
       }
@@ -153,7 +159,7 @@ $submitBtn.addEventListener("click", () => {
       component.value["references"].push({
         name: getInputValue(`referenceName-${i}`),
         componentName: getInputValue(`referenceComponentName-${i}`),
-        componentVersion: getInputValue(`referenceComponentVersion-${i}`),
+        version: getInputValue(`referenceComponentVersion-${i}`),
       });
     }
   }
@@ -166,14 +172,18 @@ $submitBtn.addEventListener("click", () => {
       }
 
       switch (getInputValue(`sourceAccessType-${i}`)) {
-        case "gitHub": {
+        case "github": {
           component.value["sources"].push({
             name: getInputValue(`sourceName-${i}`),
             version: getInputValue(`sourceVersion-${i}`),
-            // @ts-ignore
-            accessType: getInputValue(`sourceAccessType-${i}`),
-            repoUrl: getInputValue(`sourceRepoUrl-${i}`),
-            commit: getInputValue(`sourceCommit-${i}`),
+            type: "git",
+            access: {
+              // @ts-ignore
+              type: getInputValue(`sourceAccessType-${i}`),
+              repoUrl: getInputValue(`sourceRepoUrl-${i}`),
+              ref: getInputValue(`sourceGitRef-${i}`),
+              commit: getInputValue(`sourceCommit-${i}`),
+            },
           });
         }
       }
@@ -198,7 +208,7 @@ function addResourceForm(i) {
     <label class="header-label" for="resourceInputType-${i}">Resource Input Type</label><select name="resourceInputType-${i}" id="resourceInputType-${i}">
       <option disabled selected value> -- select an option -- </option>
 			<option value="file">file</option>
-      <option value="directory">directory</option>
+      <option value="dir">directory</option>
       <option value="ociImage">ociImage</option>
 		</select>
   </div>
@@ -320,7 +330,7 @@ function addSourceForm(i) {
   <div>
     <label class="header-label" for="sourceAccessType-${i}">Source Type</label><select name="sourceAccessType-${i}" id="sourceAccessType-${i}">
       <option disabled selected value> -- select an option -- </option>
-      <option value="gitHub">GitHub</option>
+      <option value="github">GitHub</option>
 		</select>
   </div>
   `;
@@ -329,7 +339,7 @@ function addSourceForm(i) {
   document.getElementById(`sourceAccessType-${i}`)?.addEventListener("change", (e) => {
     const sourceType = /** @type HTMLSelectElement */ (e.target).value;
     switch (sourceType) {
-      case "gitHub": {
+      case "github": {
         addGitHubSourceForm(i);
         break;
       }
@@ -351,6 +361,9 @@ function addGitHubSourceForm(i) {
   </div>
   <div>
     <label class="header-label" for="sourceRepoUrl-${i}">Repo URL</label><input type="text" name="sourceRepoUrl-${i}" id="sourceRepoUrl-${i}" />
+  </div>
+  <div>
+    <label class="header-label" for="sourceGitRef-${i}">Ref</label><input type="text" name="sourceGitRef-${i}" id="sourceGitRef-${i}" />
   </div>
   <div>
     <label class="header-label" for="sourceCommit-${i}">Commit</label><input type="text" name="sourceCommit-${i}" id="sourceCommit-${i}" />
@@ -405,6 +418,15 @@ function updateInvalidField(field) {
  */
 function getInputValue(inputId) {
   return /** @type null | HTMLInputElement */ (document.getElementById(inputId))?.value || "";
+}
+
+/**
+ * Get text input value (by id).
+ * @param {string} inputId
+ * @returns {boolean} input value or empty string
+ */
+function getInputValueCheckbox(inputId) {
+  return /** @type null | HTMLInputElement */ (document.getElementById(inputId))?.checked || false;
 }
 
 // ────────────────────────────────────────────────────────────

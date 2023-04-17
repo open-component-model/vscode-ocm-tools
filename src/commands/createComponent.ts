@@ -1,10 +1,11 @@
-import { existsSync, rmSync } from "fs";
+import { existsSync, mkdirSync, rmSync } from "fs";
 import { window, workspace } from "vscode";
 import { getExtensionContext } from "../extensionContext";
+import { Component } from "../ocm/types";
 import { output } from "../output";
 import { shell } from "../shell";
 import { workspaceTreeViewProvider } from "../views/treeViews";
-import { CreateComponent, CreateComponentPanel } from "../webviews/createComponent";
+import { CreateComponentPanel } from "../webviews/createComponent";
 import { addReference, AddReferenceResult } from "./addReference";
 import { addResource, AddResourceResult } from "./addResources";
 import { addSource, AddSourceResult } from "./addSource";
@@ -18,13 +19,19 @@ export interface CreateComponentResult {
   message: string;
 }
 
-export async function createComponent(component: CreateComponent): Promise<CreateComponentResult> {
+export async function createComponent(component: Component): Promise<CreateComponentResult> {
   if (!workspace.workspaceFolders) {
     return { success: false, message: "No workspace folder found." };
   }
 
-  const targetPath = workspace.workspaceFolders[0].uri.toString().replace("file://", "");
-  const outFile = `${targetPath}/component-archive`;
+  const workspacePath = workspace.workspaceFolders[0].uri.toString().replace("file://", "");
+  const outPath = `${workspacePath}/${component.path}`;
+
+  if (!existsSync(outPath)) {
+    mkdirSync(outPath, { recursive: true });
+  }
+
+  const outFile = `${outPath}/component-archive`;
 
   if (existsSync(outFile)) {
     const answer = await window.showWarningMessage(
@@ -44,10 +51,8 @@ export async function createComponent(component: CreateComponent): Promise<Creat
     rmSync(outFile, { recursive: true, force: true });
   }
 
-  const cmd = `ocm create componentarchive ${component.componentName} ${component.version} --provider ${component.provider} --scheme ${component.scheme} -F ${outFile}`;
-  output.send(
-    `Creating component ${component.componentName}:${component.version} to ${outFile}...`
-  );
+  const cmd = `ocm create componentarchive ${component.name} ${component.version} --provider ${component.provider?.name} --scheme ${component.scheme} -F ${outFile}`;
+  output.send(`Creating component ${component.name}:${component.version} to ${outFile}...`);
 
   const result = await shell.exec(cmd);
 
@@ -58,7 +63,7 @@ export async function createComponent(component: CreateComponent): Promise<Creat
 
   if (component.resources && component.resources.length > 0) {
     for (const resource of component.resources) {
-      const res: AddResourceResult = await addResource(resource);
+      const res: AddResourceResult = await addResource(resource, outFile);
       if (!res.success) {
         // return early if a resource could not be added.
         workspaceTreeViewProvider.refresh();
@@ -72,7 +77,7 @@ export async function createComponent(component: CreateComponent): Promise<Creat
 
   if (component.references && component.references.length > 0) {
     for (const reference of component.references) {
-      const res: AddReferenceResult = await addReference(reference);
+      const res: AddReferenceResult = await addReference(reference, outFile);
       if (!res.success) {
         // return early if a reference could not be added.
         workspaceTreeViewProvider.refresh();
@@ -86,7 +91,7 @@ export async function createComponent(component: CreateComponent): Promise<Creat
 
   if (component.sources && component.sources.length > 0) {
     for (const source of component.sources) {
-      const res: AddSourceResult = await addSource(source);
+      const res: AddSourceResult = await addSource(source, outFile);
       if (!res.success) {
         // return early if a source could not be added.
         workspaceTreeViewProvider.refresh();

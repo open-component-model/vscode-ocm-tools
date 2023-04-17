@@ -1,7 +1,9 @@
-import { DirectoryResource, FileResource, OciImageResource } from "../webviews/createComponent";
-import { output } from "../output";
-import { shell, ShellResult } from "../shell";
+import { existsSync, mkdirSync, unlinkSync, writeFileSync } from "fs";
 import { workspace } from "vscode";
+import YAML from "yaml";
+import { OciArtifactResource, Resource } from "../ocm/types";
+import { output } from "../output";
+import { shell } from "../shell";
 
 export interface AddResourceResult {
   success: boolean;
@@ -9,47 +11,28 @@ export interface AddResourceResult {
 }
 
 export async function addResource(
-  resource: FileResource | DirectoryResource | OciImageResource
+  resource: Resource | OciArtifactResource,
+  componentPath: string
 ): Promise<AddResourceResult> {
   if (!workspace.workspaceFolders) {
     return { success: false, message: "No workspace folder found." };
   }
 
   const workspacePath = workspace.workspaceFolders[0].uri.toString().replace("file://", "");
-  const componentPath = `${workspacePath}/component-archive`;
+  const tempPath = `${workspacePath}/.ocm`;
 
-  let result: ShellResult;
-  switch (resource.inputType) {
-    case "file": {
-      const uri = resource.path;
-
-      let cmd = `ocm add resource ${componentPath} --type ${resource.type} --name ${resource.name} --inputType ${resource.inputType} --inputPath ${uri} --mediaType ${resource.mediaType}`;
-      if (resource.compress) {
-        cmd += ` --inputCompress`;
-      }
-      output.send(`Adding resource ${resource.name} to component-archive...`);
-      result = await shell.exec(cmd);
-      break;
-    }
-    case "directory": {
-      const uri = resource.path;
-
-      let cmd = `ocm add resource ${componentPath} --type ${resource.type} --name ${resource.name} --inputType dir --inputPath ${uri}`;
-      if (resource.compress) {
-        cmd += ` --inputCompress`;
-      }
-      output.send(`Adding resource ${resource.name} to component-archive...`);
-      result = await shell.exec(cmd);
-      break;
-    }
-    case "ociImage": {
-      const cmd = `ocm add resource ${componentPath} --type ociImage --name ${resource.name} --version ${resource.version} --accessType ociArtifact --reference ${resource.imageReference}`;
-
-      output.send(`Adding resource ${resource.name} to component-archive...`);
-      result = await shell.exec(cmd);
-      break;
-    }
+  if (!existsSync(tempPath)) {
+    mkdirSync(tempPath);
   }
+
+  const random = Math.random().toString(36).substring(7);
+  const filename = `${tempPath}/resource-${random}.yaml`;
+  writeFileSync(`${filename}`, YAML.stringify(resource));
+  const cmd = `ocm add resource ${componentPath} ${filename}`;
+  const result = await shell.exec(cmd);
+
+  // Remove the temporary file
+  unlinkSync(filename);
 
   if (result.code !== 0) {
     output.send(`Adding resource failed: ${result.stderr}`);

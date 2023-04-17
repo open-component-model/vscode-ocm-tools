@@ -12,6 +12,7 @@ import {
 import { createComponent } from "../commands/createComponent";
 import { asAbsolutePath } from "../extensionContext";
 import { GlobalState } from "../globalState";
+import { Component } from "../ocm/types";
 import { getNonce, getWebviewOptions } from "./webviewUtils";
 
 /**
@@ -30,57 +31,9 @@ interface OpenDialogResponse {
   };
 }
 
-export interface FileResource {
-  inputType: "file";
-  name: string;
-  type: string;
-  mediaType: string;
-  path: string;
-  compress: boolean;
-}
-
-export interface DirectoryResource {
-  inputType: "directory";
-  name: string;
-  type: string;
-  path: string;
-  compress: boolean;
-}
-
-export interface OciImageResource {
-  inputType: "ociImage";
-  name: string;
-  version: string;
-  imageReference: string;
-}
-
-export interface GitHubSource {
-  name: string;
-  version: string;
-  accessType: "gitHub";
-  repoUrl: string;
-  commit: string;
-}
-
-export interface Reference {
-  name: string;
-  componentName: string;
-  componentVersion: string;
-}
-
-export interface CreateComponent {
-  componentName: string;
-  version: string;
-  provider: string;
-  scheme: string;
-  resources?: Array<FileResource | DirectoryResource | OciImageResource>;
-  references?: Array<Reference>;
-  sources?: Array<GitHubSource>;
-}
-
 export interface CreateComponentMessage {
   type: "createComponent";
-  value: CreateComponent;
+  value: Component;
 }
 
 export interface ShowNotification {
@@ -170,7 +123,7 @@ export class CreateComponentPanel {
       async (message: MessageFromWebview) => {
         switch (message.type) {
           case "createComponent":
-            const msg = `Creating component ${message.value.componentName}:${message.value.version}`;
+            const msg = `Creating component ${message.value.name}:${message.value.version}`;
             window.showInformationMessage(msg, { modal: false });
 
             const res = await createComponent(message.value);
