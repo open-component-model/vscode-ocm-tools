@@ -75,7 +75,7 @@ window.addEventListener("message", (event) => {
 
   switch (message.type) {
     case "updateWebviewContent": {
-      $repository.value = message.value.repositoryUrl;
+      $repository.value = message.value.repositoryUrl || "";
       break;
     }
   }
