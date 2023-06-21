@@ -34,6 +34,11 @@ $submitButton.addEventListener("click", () => {
   });
 });
 
+postVSCodeMessage({
+  type: "init-view",
+  value: true,
+});
+
 // ────────────────────────────────────────────────────────────
 /**
  * @param message {import('../../src/webviews/addComponent').MessageFromWebview}
@@ -70,6 +75,7 @@ window.addEventListener("message", (event) => {
 
   switch (message.type) {
     case "updateWebviewContent": {
+      $repository.value = message.value.repositoryUrl || "";
       break;
     }
   }

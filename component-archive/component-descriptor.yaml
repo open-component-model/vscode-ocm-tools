@@ -1,0 +1,17 @@
+apiVersion: ocm.software/v3alpha1
+kind: ComponentVersion
+metadata:
+  name: mickey.dev/podinfo
+  provider:
+    name: mickey.dev
+  version: 6.2.3
+repositoryContexts: []
+spec:
+  sources:
+  - access:
+      commit: 727513969553bfcc603e1c0ae1a75d79e4132b58
+      repoUrl: github.com/weaveworks/weave-gitops
+      type: gitHub
+    name: weave-gitops
+    type: git
+    version: 0.14.0
