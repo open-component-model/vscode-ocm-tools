@@ -43,6 +43,10 @@
         "icon": "$(add)"
       },
       {
+        "command": "ocm.remote.addFromRegistry",
+        "title": "Add Component from Registry"
+      },
+      {
         "command": "ocm.remote.remove",
         "title": "Remove Component"
       },
@@ -139,6 +143,12 @@
       }
     ],
     "menus": {
+      "commandPalette": [
+        {
+          "command": "ocm.remote.addFromRegistry",
+          "when": "false"
+        }
+      ],
       "view/title": [
         {
           "command": "ocm.component-version.createView",
@@ -191,6 +201,11 @@
           "command": "ocm.component-version.transfer-by-value",
           "when": "viewItem =~ /ComponentVersion;/",
           "group": "navigation@1"
+        },
+        {
+          "command": "ocm.remote.addFromRegistry",
+          "when": "view == ocm.views.remote && viewItem =~ /Registry;/",
+          "group": "navigation@0"
         },
         {
           "command": "ocm.remote.remove",
