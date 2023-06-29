@@ -1,27 +1,33 @@
-import { DataProvider } from './dataProvider';
-import { TreeNode } from '../nodes/treeNode';
-import { componentDescriptorParser, getComponentDescriptorMeta, ComponentMeta } from '../componentDescriptorToNode';
-import { GlobalState, GlobalStateKey } from '../../globalState';
-import { ComponentNode } from '../nodes/componentNode';
-import { ThemeIcon, window } from 'vscode';
-import { fetchComponents } from '../../commands/fetchComponents';
+import { fetchComponents } from "../../commands/fetchComponents";
+import { GlobalState, GlobalStateKey } from "../../globalState";
+import {
+  ComponentMeta,
+  componentDescriptorParser,
+  getComponentDescriptorMeta,
+} from "../componentDescriptorToNode";
+import { ComponentNode } from "../nodes/componentNode";
+import { RegistryNode } from "../nodes/registryNode";
+import { TreeNode } from "../nodes/treeNode";
+import { DataProvider } from "./dataProvider";
 
 export class RemoteDataProvider extends DataProvider {
   async buildTree(): Promise<TreeNode[]> {
-    let nodes: { [key: string]: TreeNode } = {};
+    let nodes: { [key: string]: RegistryNode } = {};
 
     let globalState = new GlobalState(this.context);
     let components: string[] | undefined = globalState.get(GlobalStateKey.Components);
 
-    if (!components) { return []; }
+    if (!components) {
+      return [];
+    }
 
     for (const name of components) {
       for await (const cd of fetchComponents(name)) {
         let meta: ComponentMeta = getComponentDescriptorMeta(cd);
-        
+
         if (!nodes.hasOwnProperty(meta.registry)) {
-          let regNode: TreeNode = new TreeNode(meta.registry);
-          regNode.setIcon(new ThemeIcon("database"));
+          let regNode: RegistryNode = new RegistryNode(meta.registry);
+
           nodes[meta.registry] = regNode;
         }
 
@@ -33,7 +39,7 @@ export class RemoteDataProvider extends DataProvider {
           }
         }
 
-        if (typeof n === 'undefined') {
+        if (typeof n === "undefined") {
           n = new ComponentNode(meta.name, meta.provider, meta.registry);
           nodes[meta.registry].addChild(n);
         }

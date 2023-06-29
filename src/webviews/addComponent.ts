@@ -8,6 +8,7 @@ import {
   WebviewPanel,
   window,
 } from "vscode";
+import { FetchComponentsResult, validateComponent } from "../commands/fetchComponents";
 import { asAbsolutePath } from "../extensionContext";
 import { GlobalState, GlobalStateKey } from "../globalState";
 import { remoteTreeViewProvider } from "../views/treeViews";
@@ -68,12 +69,12 @@ export class AddComponentPanel {
   private readonly _panel: WebviewPanel;
   private readonly _extensionUri: Uri;
   private _disposables: Disposable[] = [];
-
+  private defaultRepositoryUrl: string = "";
   private state: GlobalState;
   /** Only send message to webview when it's ready (html parsed, "message" event listener set) */
   private _onWebviewFinishedLoading = () => {};
 
-  public static createOrShow(context: ExtensionContext) {
+  public static createOrShow(context: ExtensionContext, repositoryUrl?: string) {
     const column = window.activeTextEditor ? window.activeTextEditor.viewColumn : undefined;
     let extensionUri: Uri = context.extensionUri;
 
@@ -91,14 +92,24 @@ export class AddComponentPanel {
       getWebviewOptions(extensionUri)
     );
 
-    AddComponentPanel.currentPanel = new AddComponentPanel(panel, extensionUri, context);
+    AddComponentPanel.currentPanel = new AddComponentPanel(
+      panel,
+      extensionUri,
+      context,
+      repositoryUrl
+    );
   }
 
   public static revive(panel: WebviewPanel, extensionUri: Uri, context: ExtensionContext) {
     AddComponentPanel.currentPanel = new AddComponentPanel(panel, extensionUri, context);
   }
 
-  private constructor(panel: WebviewPanel, extensionUri: Uri, context: ExtensionContext) {
+  private constructor(
+    panel: WebviewPanel,
+    extensionUri: Uri,
+    context: ExtensionContext,
+    repositoryUrl?: string
+  ) {
     this._panel = panel;
     this._extensionUri = extensionUri;
     this.state = new GlobalState(context);
@@ -127,8 +138,13 @@ export class AddComponentPanel {
       async (message: MessageFromWebview) => {
         switch (message.type) {
           case "addComponent": {
-            //TODO:  validation before adding component to remote list
-            const component = `${message.value.repositoryURL}//${message.value.componentName}`;
+            const component = `${message.value.repositoryURL}/${message.value.componentName}`;
+            const result: FetchComponentsResult = await validateComponent(component);
+            if (result.result === false && result.error !== undefined) {
+              window.showErrorMessage(`Failed to add component: ${result.error}`);
+              return;
+            }
+
             const msg = `Added component ${component}`;
 
             let updatedComponents: string[];
@@ -169,7 +185,7 @@ export class AddComponentPanel {
             this._panel.webview.postMessage({
               type: "updateWebviewContent",
               value: {
-                repositoryUrl: this.state.get(GlobalStateKey.DefaultRepositoryURL),
+                repositoryUrl: repositoryUrl || this.state.get(GlobalStateKey.DefaultRepositoryURL),
               },
             });
             break;

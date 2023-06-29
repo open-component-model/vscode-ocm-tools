@@ -1,5 +1,5 @@
 import { commands } from "vscode";
-import { addRemoteComponent } from "./commands/addRemoteComponent";
+import { addRemoteComponent, addRemoteComponentFromRegistry } from "./commands/addRemoteComponent";
 import { createComponent, createComponentView } from "./commands/createComponent";
 import { createSigningKeys, createSigningKeysView } from "./commands/createSigningKeys";
 import { deleteSigningKeys } from "./commands/deleteSigningKeys";
@@ -7,12 +7,12 @@ import { downloadComponent } from "./commands/downloadComponent";
 import { downloadResource } from "./commands/downloadResource";
 import { openDocument } from "./commands/openDocuments";
 import { removeRemoteComponent } from "./commands/removeRemoteComponent";
-import { refreshRemoteTreeView, refreshWorkspaceTreeView } from "./views/treeViews";
+import { showNewUserGuide } from "./commands/showNewUserGuide";
 import { signComponent } from "./commands/signComponent";
 import { transferComponent } from "./commands/transferComponent";
-import { verifyComponent } from "./commands/verifyComponent";
 import { transferComponentByValue } from "./commands/transferComponentByValue";
-import { showNewUserGuide } from "./commands/showNewUserGuide";
+import { verifyComponent } from "./commands/verifyComponent";
+import { refreshRemoteTreeView, refreshWorkspaceTreeView } from "./views/treeViews";
 
 export enum CommandIDs {
   componenetVersionCreate = "ocm.component-version.create",
@@ -29,6 +29,7 @@ export enum CommandIDs {
   sourceOpen = "ocm.source.open",
   referenceOpen = "ocm.reference.open",
   remoteComponentAdd = "ocm.remote.add",
+  remoteComponentAddFromRegistry = "ocm.remote.addFromRegistry",
   remoteComponentRemove = "ocm.remote.remove",
   remoteTreeViewRefresh = "ocm.remote.refresh",
   workspaceTreeViewRefresh = "ocm.workspace.refresh",
@@ -54,6 +55,10 @@ export function registerCommands() {
   commands.registerCommand(CommandIDs.sourceOpen, openDocument);
   commands.registerCommand(CommandIDs.referenceOpen, openDocument);
   commands.registerCommand(CommandIDs.remoteComponentAdd, addRemoteComponent);
+  commands.registerCommand(
+    CommandIDs.remoteComponentAddFromRegistry,
+    addRemoteComponentFromRegistry
+  );
   commands.registerCommand(CommandIDs.remoteComponentRemove, removeRemoteComponent);
 
   commands.registerCommand(CommandIDs.remoteTreeViewRefresh, refreshRemoteTreeView);
