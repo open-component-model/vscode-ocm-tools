@@ -6,7 +6,8 @@
   "publisher": "open-component-model",
   "author": "Piaras Hoban <piaras@weave.works>",
   "contributors": [
-    "Piaras Hoban <piaras@weave.works>"
+    "Piaras Hoban <piaras@weave.works>",
+    "Josh Michielsen <github@mickey.dev>"
   ],
   "icon": "resources/images/logo.png",
   "engines": {
