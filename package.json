@@ -2,7 +2,7 @@
   "name": "vscode-ocm-tools",
   "displayName": "Open Component Model tools",
   "description": "Open Component Model tools for visual studio code",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "open-component-model",
   "author": "Piaras Hoban <piaras@weave.works>",
   "contributors": [
