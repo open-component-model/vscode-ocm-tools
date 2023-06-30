@@ -17,6 +17,7 @@ const webviewTempState = {
 // Generic cluster input ids
 const repositoryId = "repository";
 const componentId = "component";
+const versionId = "version";
 
 // Inputs
 const $repository = /** @type HTMLInputElement */ (document.getElementById(repositoryId));
@@ -30,6 +31,7 @@ $submitButton.addEventListener("click", () => {
       // @ts-ignore
       repositoryURL: getInputValue(repositoryId),
       componentName: getInputValue(componentId),
+      version: getInputValue(versionId),
     },
   });
 });
