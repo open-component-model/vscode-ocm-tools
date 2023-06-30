@@ -33,6 +33,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
+      id-token: write
       contents: write
       pull-requests: write
     steps:
@@ -113,6 +114,7 @@ jobs:
           echo "Bump to $RELEASE_VERSION"
         if: ${{ github.event.inputs.releaseChannel == 'stable' }}
 
+      - uses: chainguard-dev/actions/setup-gitsign@main
       - name: Version Package
         run: |
           git status
