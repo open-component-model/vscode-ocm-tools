@@ -28,6 +28,7 @@ export interface AddComponent {
   value: {
     repositoryURL: string;
     componentName: string;
+    version: string;
   };
 }
 
@@ -138,7 +139,10 @@ export class AddComponentPanel {
       async (message: MessageFromWebview) => {
         switch (message.type) {
           case "addComponent": {
-            const component = `${message.value.repositoryURL}/${message.value.componentName}`;
+            var component = `${message.value.repositoryURL}//${message.value.componentName}`;
+            if (message.value.version !== "") {
+              component = `${component}:${message.value.version}`;
+            }
             const result: FetchComponentsResult = await validateComponent(component);
             if (result.result === false && result.error !== undefined) {
               window.showErrorMessage(`Failed to add component: ${result.error}`);
