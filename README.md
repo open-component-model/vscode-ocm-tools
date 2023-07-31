@@ -1,7 +1,8 @@
 # OCM tools for Visual Studio Code
 
 [![REUSE status](https://api.reuse.software/badge/github.com/open-component-model/vscode-ocm-tools)](https://api.reuse.software/info/github.com/open-component-model/vscode-ocm-tools)
-
+[![VSCode Marketplace Link](https://img.shields.io/visual-studio-marketplace/v/open-component-model.vscode-ocm-tools)](https://marketplace.visualstudio.com/items?itemName=open-component-model.vscode-ocm-tools)
+[![Install Counter](https://img.shields.io/visual-studio-marketplace/i/open-component-model.vscode-ocm-tools)](https://marketplace.visualstudio.com/items?itemName=open-component-model.vscode-ocm-tools)
 ### Install the extension from source
 
 To preview the extension without running the debugger you can install the extension from a `vsix` file.
