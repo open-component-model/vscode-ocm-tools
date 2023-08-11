@@ -251,7 +251,7 @@ export async function installOCMCli() {
 	request(
 		{
 			url: 'https://ocm.software/install.sh',
-			rejectUnauthorized: false,
+			rejectUnauthorized: true,
 		},
 		(error: Error, response: any, body: string) => {
 			if (!error && response.statusCode === 200) {
