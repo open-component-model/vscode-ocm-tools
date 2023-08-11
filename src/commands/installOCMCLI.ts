@@ -1,9 +1,9 @@
 import fs from 'fs';
+import fetch from 'node-fetch';
 import { IncomingMessage } from 'http';
 import https from 'https';
 import os from 'os';
 import path from 'path';
-import request from 'request';
 import { commands, window } from 'vscode';
 import { Errorable, failed, succeeded } from '../errorable';
 import { globalState } from '../extension';
@@ -248,29 +248,25 @@ export async function installOCMCli() {
 	const tempDirPath = os.tmpdir();
 	const tempFilePath = path.join(tempDirPath, installFileName);
 
-	request(
-		{
-			url: 'https://ocm.software/install.sh',
-			rejectUnauthorized: true,
-		},
-		(error: Error, response: any, body: string) => {
-			if (!error && response.statusCode === 200) {
-				fs.writeFile(tempFilePath, body, err => {
-					if (err) {
-						window.showErrorMessage(err.message);
-						return;
-					}
-					// cannot use `shell.execWithOutput()` Script requires input from the user (password)
-					runTerminalCommand(`bash "./${installFileName}"`, {
-						cwd: tempDirPath,
-						focusTerminal: true,
-					});
-				});
-			} else {
-				window.showErrorMessage(`Request failed ${error}`);
-			}
-		},
-	);
+	const req = await fetch("https://ocm.software/install.sh");
+	const text = await req.text();
+	const code = req.status;
+	if (code !== 200) {
+			window.showErrorMessage(`Request failed ${text}`);
+			return;
+	}
+
+	await fs.writeFile(tempFilePath, text, err => {
+		if (err) {
+			window.showErrorMessage(err.message);
+			return;
+		}
+		// cannot use `shell.execWithOutput()` Script requires input from the user (password)
+		runTerminalCommand(`bash "./${installFileName}"`, {
+			cwd: tempDirPath,
+			focusTerminal: true,
+		});
+	});
 }
 
 async function showNotificationToReloadTheEditor() {
