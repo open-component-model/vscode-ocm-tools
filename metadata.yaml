@@ -1,0 +1,45 @@
+kind: Component
+metadata:
+  name: ocm-vscode
+  displayName: OCM extension for Visual Studio Code
+  description: OCM extension for Visual Studio Code
+  longDescription: |-
+    OCM Extension for Visual Studio Code that offers to list, create and interact with OCM components.
+  labels:
+    language: typescript
+  tags:
+    - ocm
+    - ocm-vscode
+    - open-source
+    - inner-source
+    - vscode
+spec:
+  type:
+    name: vscode-extension
+    lifecycle: production
+  team:
+    name: ocm
+  logo: https://ocm.software/images/logo-image.png
+  docs:
+    techDocsLinks:
+      - name: OCM VS Code extension
+        url: https://github.com/open-component-model/vscode-ocm-tools
+        icon: .sa-icon--sys-help-2
+        description: OCM VS Code extension Documentation
+  issues:
+    issueTrackerLinks:
+      - name: Issues
+        url: https://github.com/open-component-model/vscode-ocm-tools/issues
+        icon: .sa-icon--task
+        description: Issues created for the component
+  links:
+    - name: VSCode extension on MS Markerplace
+      url: https://marketplace.visualstudio.com/items?itemName=open-component-model.vscode-ocm-tools
+      icon: .sa-icon--factory
+  innerSource:
+    motivation: Open for any SAP contribution
+    contributions:
+      - any
+    skills:
+      - "Go"
+      - "SBOM"
