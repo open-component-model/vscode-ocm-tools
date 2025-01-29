@@ -3,11 +3,13 @@
 [![REUSE status](https://api.reuse.software/badge/github.com/open-component-model/vscode-ocm-tools)](https://api.reuse.software/info/github.com/open-component-model/vscode-ocm-tools)
 [![VSCode Marketplace Link](https://img.shields.io/visual-studio-marketplace/v/open-component-model.vscode-ocm-tools)](https://marketplace.visualstudio.com/items?itemName=open-component-model.vscode-ocm-tools)
 [![Install Counter](https://img.shields.io/visual-studio-marketplace/i/open-component-model.vscode-ocm-tools)](https://marketplace.visualstudio.com/items?itemName=open-component-model.vscode-ocm-tools)
-### Install the extension from source
+
+## Install the extension from source
 
 To preview the extension without running the debugger you can install the extension from a `vsix` file.
 
 The process is as follows:
+
 - clone this github repo and navigate into it
 - install npm, e.g. using `brew install npm`
 - install the module "ts-loader": `npm install -D ts-loader`
@@ -16,7 +18,7 @@ The process is as follows:
 - in vscode navigate to the "Extensions" tab and select "Install from VSIX..." from the menu
 - in the file dialog navigate to the folder where you compiled the extension and select `vscode-ocm-tools-X.X.X.vsix`
 
-### Generate Typescript types for OCM
+## Generate Typescript types for OCM
 
 Typescript types can be automatically generated using the OCM schema.
 
@@ -32,4 +34,4 @@ This script will fetch the v2 and v3 schema documents for the specified version 
 
 Copyright 2025 SAP SE or an SAP affiliate company and Open Component Model contributors.
 Please see our [LICENSE](LICENSE) for copyright and license information.
-Detailed information including third-party components and their licensing/copyright information is available [via the REUSE tool](https://api.reuse.software/info/github.com/open-component-model/<repo-name>).
+Detailed information including third-party components and their licensing/copyright information is available [via the REUSE tool](https://api.reuse.software/info/github.com/open-component-model/vscode-ocm-tools).
